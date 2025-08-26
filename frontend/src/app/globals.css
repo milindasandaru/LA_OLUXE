@@ -24,3 +24,28 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Custom scrollbar hiding */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
+/* Responsive text scaling */
+@media (max-width: 640px) {
+  .category-text {
+    font-size: 0.75rem;
+  }
+}
+
+/* Smooth transitions for mobile */
+@media (max-width: 768px) {
+  .category-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
