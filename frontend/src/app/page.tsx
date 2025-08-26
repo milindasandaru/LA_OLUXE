@@ -1,150 +1,175 @@
 import MainLayout from '@/components/layout/MainLayout';
 
 export default function Home() {
+  const categories = [
+    { name: "Vehicles", count: 1500, color: "bg-red-500", icon: "🚗" },
+    { name: "Property", count: 500, color: "bg-orange-500", icon: "🏠" },
+    { name: "Electronics", count: 2300, color: "bg-green-500", icon: "📱" },
+    { name: "Mobile", count: 1000, color: "bg-blue-500", icon: "📱" },
+    { name: "Vehicles", count: 1200, color: "bg-purple-500", icon: "🚗" },
+    { name: "Vehicles", count: 1500, color: "bg-yellow-500", icon: "🚗" },
+    { name: "Vehicles", count: 1500, color: "bg-pink-500", icon: "🚗" },
+    { name: "Vehicles", count: 1600, color: "bg-indigo-500", icon: "🚗" },
+    { name: "Vehicles", count: 1700, color: "bg-teal-500", icon: "🚗" },
+    { name: "Vehicles", count: 1100, color: "bg-orange-600", icon: "🚗" },
+  ];
+
+  const sampleAds = [
+    { id: 1, title: "Sample Ad 1", price: "Rs. 50,000", image: "", isFavorite: false },
+    { id: 2, title: "Sample Ad 2", price: "Rs. 25,000", image: "", isFavorite: false },
+    { id: 3, title: "Sample Ad 3", price: "Rs. 75,000", image: "", isFavorite: true },
+    { id: 4, title: "Sample Ad 4", price: "Rs. 30,000", image: "", isFavorite: false },
+    { id: 5, title: "Sample Ad 5", price: "Rs. 85,000", image: "", isFavorite: false },
+    { id: 6, title: "Sample Ad 6", price: "Rs. 15,000", image: "", isFavorite: false },
+  ];
+
   return (
     <MainLayout showSidebar={false} showFooter={true}>
-      <div className="bg-white">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-r from-blue-600 to-purple-700 text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-            <div className="text-center">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                Buy & Sell Everything
-                <span className="block text-yellow-300">On ADORA</span>
-              </h1>
-              <p className="text-xl md:text-2xl mb-8 text-blue-100">
-                Your trusted marketplace for finding great deals and selling your items
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                  href="/ads"
-                  className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors"
-                >
-                  Browse Ads
-                </a>
-                <a
-                  href="/post-ad"
-                  className="bg-yellow-500 text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-yellow-600 transition-colors"
-                >
-                  Post Your Ad
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
+      <div className="bg-gray-50 min-h-screen">
+        {/* Hero Section with Quote and Search */}
+        <section className="bg-white py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            {/* Hero Quote */}
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-2">
+              The Largest Market Place in
+            </h1>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+              Sri Lanka
+            </h2>
+            <p className="text-lg text-gray-600 mb-12">
+              Buy and Sell anything
+            </p>
 
-        {/* Search Section */}
-        <section className="py-12 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-center mb-6">Find What You're Looking For</h2>
-              <div className="flex flex-col md:flex-row gap-4">
+            {/* Search Section */}
+            <div className="max-w-2xl mx-auto">
+              <div className="flex flex-col md:flex-row gap-4 bg-white rounded-full border border-gray-200 p-2 shadow-sm">
                 <input
                   type="text"
-                  placeholder="What are you looking for?"
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Search anything"
+                  className="flex-1 px-6 py-3 rounded-full border-0 focus:outline-none focus:ring-0 text-gray-700 placeholder-gray-400"
                 />
-                <select className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <option>All Categories</option>
-                  <option>Electronics</option>
+                <select className="px-6 py-3 rounded-full border-0 focus:outline-none focus:ring-0 text-gray-700 bg-transparent md:border-l border-gray-200">
+                  <option>Select Category</option>
                   <option>Vehicles</option>
                   <option>Property</option>
+                  <option>Electronics</option>
+                  <option>Mobile</option>
                   <option>Jobs</option>
                   <option>Services</option>
                 </select>
-                <button className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                  Search
+                <button className="bg-green-500 text-white px-8 py-3 rounded-full hover:bg-green-600 transition-colors flex items-center justify-center">
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
                 </button>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Categories Section */}
-        <section className="py-16">
+        {/* Categories Section - Horizontal Scroll */}
+        <section className="bg-white py-6 md:py-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center">
+              {/* Left Arrow - Hidden on mobile */}
+              <button className="hidden md:flex p-2 text-gray-400 hover:text-gray-600 flex-shrink-0">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              
+              {/* Categories Container */}
+              <div className="flex-1 overflow-x-auto scrollbar-hide px-4 sm:px-6 lg:px-8">
+                <div className="flex space-x-4 sm:space-x-6 md:space-x-8 py-4">
+                  {categories.map((category, index) => (
+                    <div key={index} className="flex-shrink-0 text-center cursor-pointer group min-w-[80px]">
+                      <div className={`w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 ${category.color} rounded-full flex items-center justify-center mb-2 mx-auto group-hover:scale-105 transition-transform`}>
+                        <span className="text-lg sm:text-xl md:text-2xl text-white">{category.icon}</span>
+                      </div>
+                      <h3 className="text-xs sm:text-sm font-medium text-gray-900 mb-1 truncate">{category.name}</h3>
+                      <p className="text-xs text-gray-500">({category.count})</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Right Arrow - Hidden on mobile */}
+              <button className="hidden md:flex p-2 text-gray-400 hover:text-gray-600 flex-shrink-0">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        {/* Popular Categories with Ads */}
+        <section className="py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center mb-12">Popular Categories</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-              {[
-                { name: "Electronics", icon: "📱", count: "1,234 ads" },
-                { name: "Vehicles", icon: "🚗", count: "856 ads" },
-                { name: "Property", icon: "🏠", count: "423 ads" },
-                { name: "Jobs", icon: "💼", count: "789 ads" },
-                { name: "Services", icon: "🔧", count: "567 ads" },
-                { name: "Fashion", icon: "👗", count: "912 ads" }
-              ].map((category) => (
-                <a
-                  key={category.name}
-                  href={`/ads?category=${category.name.toLowerCase()}`}
-                  className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow group"
-                >
-                  <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">
-                    {category.icon}
+            {/* Vehicles Section */}
+            <div className="mb-12">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold text-gray-900 flex items-center">
+                  Vehicles
+                  <svg className="w-5 h-5 ml-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </h2>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                {sampleAds.map((ad) => (
+                  <div key={ad.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden group hover:shadow-md transition-shadow">
+                    {/* Ad Image Placeholder */}
+                    <div className="aspect-square bg-gray-200 relative">
+                      <button 
+                        className={`absolute top-2 right-2 p-1.5 rounded-full ${ad.isFavorite ? 'bg-red-500 text-white' : 'bg-white text-gray-400'} hover:bg-red-500 hover:text-white transition-colors shadow-sm`}
+                      >
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                      </button>
+                    </div>
+                    {/* Ad Info */}
+                    <div className="p-3">
+                      <h3 className="text-sm font-medium text-gray-900 mb-1 line-clamp-2">{ad.title}</h3>
+                      <p className="text-sm font-semibold text-gray-900">{ad.price}</p>
+                    </div>
                   </div>
-                  <h3 className="font-semibold text-gray-800 mb-1">{category.name}</h3>
-                  <p className="text-sm text-gray-500">{category.count}</p>
-                </a>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center mb-12">Why Choose ADORA?</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🔒</span>
-                </div>
-                <h3 className="font-semibold text-xl mb-3">Safe & Secure</h3>
-                <p className="text-gray-600">
-                  All listings are verified and our platform ensures secure transactions for peace of mind.
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">⚡</span>
-                </div>
-                <h3 className="font-semibold text-xl mb-3">Easy to Use</h3>
-                <p className="text-gray-600">
-                  Post your ad in minutes with our simple interface. Browse and find what you need quickly.
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🌟</span>
-                </div>
-                <h3 className="font-semibold text-xl mb-3">Best Deals</h3>
-                <p className="text-gray-600">
-                  Find amazing deals from local sellers and businesses. Get the best value for your money.
-                </p>
+                ))}
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* CTA Section */}
-        <section className="py-16 bg-blue-600 text-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-bold mb-4">Ready to Start Trading?</h2>
-            <p className="text-xl mb-8 text-blue-100">
-              Join thousands of users who are already buying and selling on ADORA
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="/register"
-                className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors"
-              >
-                Sign Up Free
-              </a>
-              <a
-                href="/post-ad"
-                className="bg-yellow-500 text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-yellow-600 transition-colors"
-              >
-                Post Your First Ad
-              </a>
+            {/* Property Section */}
+            <div className="mb-12">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold text-gray-900 flex items-center">
+                  Property
+                  <svg className="w-5 h-5 ml-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </h2>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                {sampleAds.map((ad) => (
+                  <div key={`property-${ad.id}`} className="bg-white rounded-lg border border-gray-200 overflow-hidden group hover:shadow-md transition-shadow">
+                    {/* Ad Image Placeholder */}
+                    <div className="aspect-square bg-gray-200 relative">
+                      <button 
+                        className={`absolute top-2 right-2 p-1.5 rounded-full ${ad.isFavorite ? 'bg-red-500 text-white' : 'bg-white text-gray-400'} hover:bg-red-500 hover:text-white transition-colors shadow-sm`}
+                      >
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                      </button>
+                    </div>
+                    {/* Ad Info */}
+                    <div className="p-3">
+                      <h3 className="text-sm font-medium text-gray-900 mb-1 line-clamp-2">{ad.title}</h3>
+                      <p className="text-sm font-semibold text-gray-900">{ad.price}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
