@@ -102,6 +102,58 @@
   --surface-muted: var(--neutral-800);
 }
 
+/* Apply theme colors to common elements */
+[data-theme="dark"] body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+}
+
+[data-theme="light"] body {
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+}
+
+/* Theme-aware Tailwind overrides */
+[data-theme="dark"] .bg-white {
+  background-color: var(--bg-base) !important;
+}
+
+[data-theme="dark"] .bg-gray-50 {
+  background-color: var(--surface-muted) !important;
+}
+
+[data-theme="dark"] .text-gray-900 {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .text-gray-800 {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .text-gray-700 {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .text-gray-600 {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .text-gray-500 {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .border-gray-100 {
+  border-color: var(--border-subtle) !important;
+}
+
+[data-theme="dark"] .border-gray-200 {
+  border-color: var(--border-subtle) !important;
+}
+
+[data-theme="dark"] .bg-orange-500 {
+  background-color: var(--brand-color) !important;
+}
+
 /* Base Typography Classes */
 .font-primary {
   font-family: var(--font-family-primary);

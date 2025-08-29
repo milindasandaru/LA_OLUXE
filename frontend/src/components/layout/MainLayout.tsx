@@ -17,7 +17,12 @@ export default function MainLayout({
   className = ''
 }: MainLayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div 
+      className="min-h-screen flex flex-col transition-colors duration-300"
+      style={{ 
+        backgroundColor: 'var(--surface-muted)'
+      }}
+    >
       {/* Header */}
       <Header 
         showSidebar={showSidebar} 
