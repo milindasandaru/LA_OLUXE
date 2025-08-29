@@ -27,28 +27,28 @@ export default function Home() {
     <MainLayout showSidebar={false} showFooter={true}>
       <div className="bg-gray-50 min-h-screen">
         {/* Hero Section with Quote and Search */}
-        <section className="bg-white py-8 sm:py-12">
+        <section className="bg-white py-12">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             {/* Hero Quote */}
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl md:text-4xl lg:text-4xl font-bold text-gray-900 mb-2">
               The Largest Market Place in
             </h1>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl lg:text-4xl font-bold text-gray-900 mb-4">
               Sri Lanka
             </h2>
-            <p className="text-base sm:text-lg text-gray-600 mb-8 sm:mb-12">
+            <p className="text-lg text-gray-600 mb-12">
               Buy and Sell anything
             </p>
 
             {/* Search Section */}
-            <div className="max-w-3xl mx-auto">
-              <div className="flex flex-col sm:flex-row gap-2 bg-white rounded-full border border-gray-200 p-2 shadow-sm">
+            <div className="max-w-2xl mx-auto">
+              <div className="flex flex-col md:flex-row gap-4 bg-white rounded-full border border-gray-200 p-2 shadow-sm">
                 <input
                   type="text"
                   placeholder="Search anything"
-                  className="flex-1 px-6 py-3 rounded-full border-0 focus:outline-none focus:ring-0 text-gray-700 placeholder-gray-400 min-w-0"
+                  className="flex-1 px-6 py-3 rounded-full border-0 focus:outline-none focus:ring-0 text-gray-700 placeholder-gray-400"
                 />
-                <select className="px-6 py-3 rounded-full border-0 focus:outline-none focus:ring-0 text-gray-700 bg-transparent sm:border-l border-gray-200 min-w-0 sm:min-w-[160px]">
+                <select className="px-6 py-3 rounded-full border-0 focus:outline-none focus:ring-0 text-gray-700 bg-transparent md:border-l border-gray-200">
                   <option>Select Category</option>
                   <option>Vehicles</option>
                   <option>Property</option>
@@ -57,7 +57,7 @@ export default function Home() {
                   <option>Jobs</option>
                   <option>Services</option>
                 </select>
-                <button className="bg-green-500 text-white px-6 sm:px-8 py-3 rounded-full hover:bg-green-600 transition-colors flex items-center justify-center min-w-[50px]">
+                <button className="bg-green-500 text-white px-8 py-3 rounded-full hover:bg-green-600 transition-colors flex items-center justify-center">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
@@ -70,31 +70,26 @@ export default function Home() {
         {/* Categories Section - Horizontal Scroll */}
         <section className="bg-white py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="relative">
-              {/* Left Arrow */}
-              <button className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 p-2 text-gray-400 hover:text-gray-600 bg-white rounded-full shadow-md">
+            <div className="flex items-center mb-6">
+              <button className="p-2 text-gray-400 hover:text-gray-600">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
-              
-              {/* Categories Container */}
-              <div className="overflow-x-auto scrollbar-hide px-12">
-                <div className="flex space-x-8 py-4 min-w-max">
+              <div className="flex-1 overflow-x-auto">
+                <div className="flex space-x-6 px-4">
                   {categories.map((category, index) => (
-                    <div key={index} className="flex-shrink-0 text-center cursor-pointer group min-w-[80px]">
-                      <div className={`w-16 h-16 mx-auto ${category.color} rounded-full flex items-center justify-center mb-3 group-hover:scale-105 transition-transform shadow-sm`}>
+                    <div key={index} className="flex-shrink-0 text-center cursor-pointer group">
+                      <div className={`w-16 h-16 ${category.color} rounded-full flex items-center justify-center mb-2 group-hover:scale-105 transition-transform`}>
                         <span className="text-2xl text-white">{category.icon}</span>
                       </div>
-                      <h3 className="text-sm font-medium text-gray-900 mb-1 truncate">{category.name}</h3>
+                      <h3 className="text-sm font-medium text-gray-900 mb-1">{category.name}</h3>
                       <p className="text-xs text-gray-500">({category.count})</p>
                     </div>
                   ))}
                 </div>
               </div>
-              
-              {/* Right Arrow */}
-              <button className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 p-2 text-gray-400 hover:text-gray-600 bg-white rounded-full shadow-md">
+              <button className="p-2 text-gray-400 hover:text-gray-600">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>

@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ADORA - Buy & Sell Online",
+  title: "ADORA - Online Marketplace Website",
   description: "Find great deals and sell your items on ADORA classified ads platform",
 };
 
