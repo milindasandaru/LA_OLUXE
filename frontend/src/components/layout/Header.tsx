@@ -25,7 +25,17 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
             {/* Post Ad Button */}
             <Link
               href="/post-ad"
-              className="bg-orange-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-orange-600 transition-colors"
+              style={{
+                backgroundColor: '#f97316',
+                color: 'white',
+              }}
+              className="px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:shadow-md"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#ea580c';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#f97316';
+              }}
             >
               AD Post
             </Link>
