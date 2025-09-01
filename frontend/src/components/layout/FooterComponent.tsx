@@ -104,7 +104,7 @@ export default function FooterComponent() {
                   <li key={index}>
                     <a 
                       href="#" 
-                      className="text-sm transition-colors duration-200 hover:underline"
+                      className="text-sm transition-colors duration-200"
                       style={{ 
                         color: 'var(--text-secondary)',
                       }}
@@ -144,7 +144,7 @@ export default function FooterComponent() {
                   <li key={index}>
                     <a 
                       href="#" 
-                      className="text-sm transition-colors duration-200 hover:underline flex items-center space-x-2"
+                      className="text-sm transition-colors duration-200 flex items-center space-x-2"
                       style={{ 
                         color: 'var(--text-secondary)',
                       }}
@@ -217,7 +217,7 @@ export default function FooterComponent() {
                   <li key={index}>
                     <a 
                       href="#" 
-                      className="text-sm transition-colors duration-200 hover:underline"
+                      className="text-sm transition-colors duration-200"
                       style={{ 
                         color: 'var(--text-secondary)',
                       }}

@@ -40,22 +40,22 @@ export default function Home() {
     { name: 'Vehicles', value: 'vehicles', icon: '🚗' },
     { name: 'Property', value: 'property', icon: '🏠' },
     { name: 'Electronics', value: 'electronics', icon: '📱' },
-    { name: 'Mobile', value: 'mobile', icon: '📞' },
+    { name: 'Mobile Phones', value: 'mobile', icon: '📞' },
     { name: 'Jobs', value: 'jobs', icon: '💼' },
     { name: 'Services', value: 'services', icon: '🔧' },
+    { name: 'Fashion', value: 'fashion', icon: '👗' },
+    { name: 'Home & Garden', value: 'home-garden', icon: '🏡' },
   ];
 
   const categories = [
     { name: "Vehicles", count: 1500, color: "bg-red-500", icon: "🚗" },
     { name: "Property", count: 500, color: "bg-orange-500", icon: "🏠" },
     { name: "Electronics", count: 2300, color: "bg-green-500", icon: "📱" },
-    { name: "Mobile", count: 1000, color: "bg-blue-500", icon: "📱" },
-    { name: "Vehicles", count: 1200, color: "bg-purple-500", icon: "🚗" },
-    { name: "Vehicles", count: 1500, color: "bg-yellow-500", icon: "🚗" },
-    { name: "Vehicles", count: 1500, color: "bg-pink-500", icon: "🚗" },
-    { name: "Vehicles", count: 1600, color: "bg-indigo-500", icon: "🚗" },
-    { name: "Vehicles", count: 1700, color: "bg-teal-500", icon: "🚗" },
-    { name: "Vehicles", count: 1100, color: "bg-orange-600", icon: "🚗" },
+    { name: "Mobile Phones", count: 1000, color: "bg-blue-500", icon: "�" },
+    { name: "Jobs", count: 850, color: "bg-purple-500", icon: "�" },
+    { name: "Services", count: 1200, color: "bg-yellow-500", icon: "�" },
+    { name: "Fashion", count: 1800, color: "bg-pink-500", icon: "�" },
+    { name: "Home & Garden", count: 920, color: "bg-indigo-500", icon: "🏡" },
   ];
 
   const sampleAds = [
