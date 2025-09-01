@@ -40,22 +40,22 @@ export default function Home() {
     { name: 'Vehicles', value: 'vehicles', icon: '🚗' },
     { name: 'Property', value: 'property', icon: '🏠' },
     { name: 'Electronics', value: 'electronics', icon: '📱' },
-    { name: 'Mobile', value: 'mobile', icon: '📞' },
+    { name: 'Mobile Phones', value: 'mobile', icon: '📞' },
     { name: 'Jobs', value: 'jobs', icon: '💼' },
     { name: 'Services', value: 'services', icon: '🔧' },
+    { name: 'Fashion', value: 'fashion', icon: '👗' },
+    { name: 'Home & Garden', value: 'home-garden', icon: '🏡' },
   ];
 
   const categories = [
     { name: "Vehicles", count: 1500, color: "bg-red-500", icon: "🚗" },
     { name: "Property", count: 500, color: "bg-orange-500", icon: "🏠" },
     { name: "Electronics", count: 2300, color: "bg-green-500", icon: "📱" },
-    { name: "Mobile", count: 1000, color: "bg-blue-500", icon: "📱" },
-    { name: "Vehicles", count: 1200, color: "bg-purple-500", icon: "🚗" },
-    { name: "Vehicles", count: 1500, color: "bg-yellow-500", icon: "🚗" },
-    { name: "Vehicles", count: 1500, color: "bg-pink-500", icon: "🚗" },
-    { name: "Vehicles", count: 1600, color: "bg-indigo-500", icon: "🚗" },
-    { name: "Vehicles", count: 1700, color: "bg-teal-500", icon: "🚗" },
-    { name: "Vehicles", count: 1100, color: "bg-orange-600", icon: "🚗" },
+    { name: "Mobile Phones", count: 1000, color: "bg-blue-500", icon: "�" },
+    { name: "Jobs", count: 850, color: "bg-purple-500", icon: "�" },
+    { name: "Services", count: 1200, color: "bg-yellow-500", icon: "�" },
+    { name: "Fashion", count: 1800, color: "bg-pink-500", icon: "�" },
+    { name: "Home & Garden", count: 920, color: "bg-indigo-500", icon: "🏡" },
   ];
 
   const sampleAds = [
@@ -124,7 +124,7 @@ export default function Home() {
                 />
                 
                 {/* Custom Glass UI Dropdown */}
-                <div ref={dropdownRef} className="relative sm:min-w-[180px]">
+                <div ref={dropdownRef} className="relative sm:min-w-[220px]">
                   <button
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     className="w-full pl-6 pr-3 py-4 rounded-3xl border-0 focus:outline-none flex items-center justify-between glass-dropdown"
@@ -153,7 +153,7 @@ export default function Home() {
 
                   {/* Glass UI Dropdown Menu */}
                   {isDropdownOpen && (
-                    <div className="absolute top-full left-0 right-0 mt-2 glass-dropdown-menu rounded-2xl overflow-hidden shadow-2xl z-50">
+                    <div className="absolute top-full left-0 right-0 mt-2 glass-dropdown-menu rounded-2xl overflow-hidden shadow-2xl z-50 min-w-[220px]">
                       <div className="py-2">
                         {dropdownCategories.map((category, index) => (
                           <button
@@ -162,7 +162,7 @@ export default function Home() {
                               setSelectedCategory(category.name);
                               setIsDropdownOpen(false);
                             }}
-                            className="w-full px-4 py-3 text-left hover:bg-white/20 transition-all duration-200 flex items-center space-x-3 group"
+                            className="w-full px-6 py-3 text-left hover:bg-white/20 transition-all duration-200 flex items-center space-x-3 group"
                             style={{ color: 'var(--text-primary)' }}
                           >
                             {category.icon && (

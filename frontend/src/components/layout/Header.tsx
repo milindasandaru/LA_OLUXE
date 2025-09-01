@@ -115,17 +115,13 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
               </Link>
               <Link
                 href="/favorites"
-                className="flex items-center px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors"
+                className="block px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
                 Saved Ads
               </Link>
-              <div className="px-4 py-3 flex items-center">
-                <span className="text-sm text-gray-500 mr-3">Theme:</span>
-                <ThemeToggle />
+              <div className="block px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors">
+                Theme
               </div>
             </div>
           </div>
