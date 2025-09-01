@@ -53,8 +53,8 @@
     --surface-muted: var(--neutral-50);
     
     /* Typography System */
-    --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    --font-family-secondary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-family-primary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-family-secondary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     
     /* Font Scale */
     --size-xs: 0.75rem;     /* 12px */
@@ -152,6 +152,18 @@
 
 [data-theme="dark"] .bg-orange-500 {
   background-color: var(--brand-color) !important;
+}
+
+/* Dark theme gradient overrides */
+[data-theme="dark"] .bg-gradient-to-b {
+  background: linear-gradient(to bottom, var(--bg-base), var(--surface-muted)) !important;
+}
+
+/* Placeholder text color for dark theme */
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: var(--text-secondary) !important;
+  opacity: 0.7;
 }
 
 /* Base Typography Classes */
