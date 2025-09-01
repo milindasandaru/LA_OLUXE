@@ -29,7 +29,7 @@ export const registerValidation: ValidationChain[] = [
   body('password')
     .isLength({ min: 8, max: 128 })
     .withMessage('Password must be between 8 and 128 characters')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.,:;'"(){}[\]<>+=_-])[A-Za-z\d@$!%*?&.,:;'"(){}[\]<>+=_-]/)
     .withMessage('Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character'),
 
   body('confirmPassword')
@@ -126,7 +126,7 @@ export const resetPasswordValidation: ValidationChain[] = [
   body('password')
     .isLength({ min: 8, max: 128 })
     .withMessage('Password must be between 8 and 128 characters')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.,:;'"(){}[\]<>+=_-])[A-Za-z\d@$!%*?&.,:;'"(){}[\]<>+=_-]/)
     .withMessage('Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character'),
 
   body('confirmPassword')
@@ -146,7 +146,7 @@ export const changePasswordValidation: ValidationChain[] = [
   body('newPassword')
     .isLength({ min: 8, max: 128 })
     .withMessage('New password must be between 8 and 128 characters')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.,:;'"(){}[\]<>+=_-])[A-Za-z\d@$!%*?&.,:;'"(){}[\]<>+=_-]/)
     .withMessage('New password must contain at least one lowercase letter, one uppercase letter, one number, and one special character'),
 
   body('confirmNewPassword')
