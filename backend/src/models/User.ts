@@ -150,9 +150,14 @@ UserSchema.index({ isActive: 1 });
 UserSchema.index({ createdAt: -1 });
 
 // Virtual for account lock status
-UserSchema.virtual('isLocked').get(function(this: IUser) {
+UserSchema.virtual('accountLocked').get(function(this: IUser) {
   return !!(this.lockUntil && this.lockUntil > new Date());
 });
+
+// Method to check if account is locked
+UserSchema.methods.isLocked = function(): boolean {
+  return !!(this.lockUntil && this.lockUntil > new Date());
+};
 
 // Pre-save middleware to hash password
 UserSchema.pre('save', async function(next) {
