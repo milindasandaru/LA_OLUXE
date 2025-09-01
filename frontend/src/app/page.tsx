@@ -194,33 +194,33 @@ export default function Home() {
               </div>
               
               {/* Responsive Ad Grid */}
-              <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6">
+              <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-5 gap-3 lg:gap-4">
                 {sampleAds.map((ad) => (
                   <div key={ad.id} className="bg-white rounded-2xl border border-gray-200 overflow-hidden group hover:shadow-xl hover:border-orange-200 transition-all duration-300 hover:-translate-y-1">
                     {/* Ad Image Placeholder */}
                     <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gray-300 animate-pulse"></div>
                       <button 
-                        className={`absolute top-3 right-3 p-2 rounded-full ${ad.isFavorite ? 'bg-red-500 text-white' : 'bg-white/80 text-gray-400'} hover:bg-red-500 hover:text-white transition-all duration-200 shadow-lg z-10`}
+                        className={`absolute top-2 right-2 p-1.5 rounded-full ${ad.isFavorite ? 'bg-red-500 text-white' : 'bg-white/80 text-gray-400'} hover:bg-red-500 hover:text-white transition-all duration-200 shadow-lg z-10`}
                       >
-                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
                       </button>
-                      <div className="absolute bottom-3 left-3 px-3 py-1.5 bg-white/90 rounded-full text-xs font-medium text-gray-700">
+                      <div className="absolute bottom-2 left-2 px-2 py-1 bg-white/90 rounded-full text-xs font-medium text-gray-700">
                         Featured
                       </div>
                     </div>
                     
                     {/* Ad Info */}
-                    <div className="p-4">
-                      <h3 className="text-sm lg:text-base font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-orange-600 transition-colors">
+                    <div className="p-3">
+                      <h3 className="text-xs lg:text-sm font-semibold text-gray-900 mb-1 line-clamp-2 group-hover:text-orange-600 transition-colors">
                         {ad.title}
                       </h3>
-                      <p className="text-lg font-bold text-gray-900 mb-1">{ad.price}</p>
-                      <p className="text-xs text-gray-500 mb-3">Colombo, Sri Lanka</p>
+                      <p className="text-sm font-bold text-gray-900 mb-1">{ad.price}</p>
+                      <p className="text-xs text-gray-500 mb-2">Colombo, Sri Lanka</p>
                       <div className="flex items-center text-xs text-gray-400">
-                        <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         2 hours ago
@@ -247,7 +247,7 @@ export default function Home() {
               </div>
               
               {/* Responsive Ad Grid */}
-              <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6">
+              <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-6 gap-3 lg:gap-4">
                 {sampleAds.map((ad) => (
                   <div key={`property-${ad.id}`} className="bg-white rounded-xl border border-gray-200 overflow-hidden group hover:shadow-xl hover:border-orange-200 transition-all duration-300 hover:-translate-y-1">
                     {/* Ad Image Placeholder */}

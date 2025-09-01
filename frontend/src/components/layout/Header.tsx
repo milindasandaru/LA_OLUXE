@@ -19,7 +19,7 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
-              <span className="text-2xl font-bold text-orange-500">ADORA</span>
+              <span className="text-2xl font-bold text-green-500">ADORA</span>
             </Link>
           </div>
 
