@@ -99,14 +99,7 @@ app.get('/api/db-status', (req, res) => {
   });
 });
 
-// 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Route not found',
-    error: `Cannot ${req.method} ${req.originalUrl}`
-  });
-});
+// Routes not found handler moved to after all other routes
 
 // Global error handler
 app.use((error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
