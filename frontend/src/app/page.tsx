@@ -124,7 +124,7 @@ export default function Home() {
                 />
                 
                 {/* Custom Glass UI Dropdown */}
-                <div ref={dropdownRef} className="relative sm:min-w-[180px]">
+                <div ref={dropdownRef} className="relative sm:min-w-[220px]">
                   <button
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     className="w-full pl-6 pr-3 py-4 rounded-3xl border-0 focus:outline-none flex items-center justify-between glass-dropdown"
@@ -153,7 +153,7 @@ export default function Home() {
 
                   {/* Glass UI Dropdown Menu */}
                   {isDropdownOpen && (
-                    <div className="absolute top-full left-0 right-0 mt-2 glass-dropdown-menu rounded-2xl overflow-hidden shadow-2xl z-50">
+                    <div className="absolute top-full left-0 right-0 mt-2 glass-dropdown-menu rounded-2xl overflow-hidden shadow-2xl z-50 min-w-[220px]">
                       <div className="py-2">
                         {dropdownCategories.map((category, index) => (
                           <button
@@ -162,7 +162,7 @@ export default function Home() {
                               setSelectedCategory(category.name);
                               setIsDropdownOpen(false);
                             }}
-                            className="w-full px-4 py-3 text-left hover:bg-white/20 transition-all duration-200 flex items-center space-x-3 group"
+                            className="w-full px-6 py-3 text-left hover:bg-white/20 transition-all duration-200 flex items-center space-x-3 group"
                             style={{ color: 'var(--text-primary)' }}
                           >
                             {category.icon && (
