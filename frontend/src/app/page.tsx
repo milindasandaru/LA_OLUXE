@@ -247,7 +247,7 @@ export default function Home() {
               </div>
               
               {/* Responsive Ad Grid */}
-              <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-6 gap-3 lg:gap-4">
+              <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-5 gap-3 lg:gap-4">
                 {sampleAds.map((ad) => (
                   <div key={`property-${ad.id}`} className="bg-white rounded-xl border border-gray-200 overflow-hidden group hover:shadow-xl hover:border-orange-200 transition-all duration-300 hover:-translate-y-1">
                     {/* Ad Image Placeholder */}
