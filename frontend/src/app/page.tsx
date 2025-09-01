@@ -57,7 +57,7 @@ export default function Home() {
                   <option>Jobs</option>
                   <option>Services</option>
                 </select>
-                <button className="bg-orange-500 text-white px-8 py-4 rounded-xl hover:bg-orange-600 transition-all duration-200 flex items-center justify-center font-medium shadow-md hover:shadow-lg">
+                <button className="bg-green-500 text-white px-8 py-4 rounded-xl hover:bg-green-600 transition-all duration-200 flex items-center justify-center font-medium shadow-md hover:shadow-lg">
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
@@ -68,32 +68,29 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Categories Section - Responsive Grid */}
-        <section className="bg-white py-12 border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">Browse Categories</h2>
-              <p className="text-gray-600">Find what you're looking for</p>
-            </div>
-            
-            {/* Categories Grid - Full Width Responsive */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-10 gap-4 lg:gap-6">
-              {categories.map((category, index) => (
-                <div 
-                  key={index} 
-                  className="flex flex-col items-center text-center cursor-pointer group hover:transform hover:scale-105 transition-all duration-200 p-4 rounded-xl hover:bg-gray-50"
-                >
-                  <div className={`w-16 h-16 lg:w-20 lg:h-20 ${category.color} rounded-2xl flex items-center justify-center mb-3 shadow-md group-hover:shadow-lg transition-all duration-200`}>
-                    <span className="text-2xl lg:text-3xl">{category.icon}</span>
+        {/* Categories Section - Horizontal/Vertical Responsive */}
+        <section className="bg-white py-8 border-b border-gray-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">            
+            {/* Categories - Horizontal on large screens, vertical grid on mobile */}
+            <div className="lg:flex lg:justify-center lg:items-center lg:space-x-8 lg:overflow-x-auto">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex lg:space-x-8 gap-4 lg:gap-0">
+                {categories.map((category, index) => (
+                  <div 
+                    key={index} 
+                    className="flex flex-col lg:flex-col items-center text-center cursor-pointer group hover:transform hover:scale-105 transition-all duration-200 p-4 rounded-xl hover:bg-gray-50 lg:flex-shrink-0"
+                  >
+                    <div className={`w-16 h-16 lg:w-18 lg:h-18 ${category.color} rounded-2xl flex items-center justify-center mb-3 shadow-md group-hover:shadow-lg transition-all duration-200`}>
+                      <span className="text-2xl">{category.icon}</span>
+                    </div>
+                    <h3 className="text-sm font-medium text-gray-900 mb-1 line-clamp-1 whitespace-nowrap">
+                      {category.name}
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      ({category.count.toLocaleString()})
+                    </p>
                   </div>
-                  <h3 className="text-sm lg:text-base font-medium text-gray-900 mb-1 line-clamp-1">
-                    {category.name}
-                  </h3>
-                  <p className="text-xs lg:text-sm text-gray-500">
-                    ({category.count.toLocaleString()})
-                  </p>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -108,7 +105,7 @@ export default function Home() {
                   🚗 Vehicles
                   <span className="ml-3 text-lg text-gray-500 font-normal">({sampleAds.length * 250} ads)</span>
                 </h2>
-                <button className="text-orange-500 hover:text-orange-600 font-semibold flex items-center transition-colors">
+                <button className="text-green-500 hover:text-green-600 font-semibold flex items-center transition-colors">
                   View All
                   <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -161,7 +158,7 @@ export default function Home() {
                   🏠 Property
                   <span className="ml-3 text-lg text-gray-500 font-normal">({sampleAds.length * 150} ads)</span>
                 </h2>
-                <button className="text-orange-500 hover:text-orange-600 font-semibold flex items-center transition-colors">
+                <button className="text-green-500 hover:text-green-600 font-semibold flex items-center transition-colors">
                   View All
                   <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
