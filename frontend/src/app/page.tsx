@@ -1,6 +1,23 @@
+"use client";
+
 import MainLayout from '@/components/layout/MainLayout';
+import { useRef } from 'react';
 
 export default function Home() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -200, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+    }
+  };
+
   const categories = [
     { name: "Vehicles", count: 1500, color: "bg-red-500", icon: "🚗" },
     { name: "Property", count: 500, color: "bg-orange-500", icon: "🏠" },
@@ -57,7 +74,7 @@ export default function Home() {
             {/* Search Section */}
             <div className="w-full max-w-4xl mx-auto">
               <div 
-                className="flex flex-col sm:flex-row gap-3 rounded-3xl p-3 shadow-lg hover:shadow-xl transition-shadow"
+                className="flex flex-col sm:flex-row gap-3 rounded-[2rem] p-3 shadow-lg hover:shadow-xl transition-shadow"
                 style={{ 
                   backgroundColor: 'var(--bg-elevated)'
                 }}
@@ -72,7 +89,7 @@ export default function Home() {
                   }}
                 />
                 <select 
-                  className="px-6 py-4 rounded-3xl border-0 focus:outline-none sm:min-w-[180px]"
+                  className="pl-6 pr-3 py-4 rounded-3xl border-0 focus:outline-none sm:min-w-[180px]"
                   style={{ 
                     backgroundColor: 'var(--surface-input)',
                     color: 'var(--text-primary)'
@@ -86,7 +103,7 @@ export default function Home() {
                   <option>Jobs</option>
                   <option>Services</option>
                 </select>
-                <button className="bg-green-500 text-white p-4 rounded-full hover:bg-green-600 transition-all duration-200 flex items-center justify-center font-medium shadow-md hover:shadow-lg">
+                <button className="bg-green-500 text-white p-4 rounded-full hover:bg-green-600 transition-all duration-180 flex items-center justify-center font-medium shadow-md hover:shadow-lg">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
@@ -100,25 +117,60 @@ export default function Home() {
         <section className="bg-white py-8 border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">            
             {/* Categories - Horizontal on large screens, vertical grid on mobile */}
-            <div className="lg:flex lg:justify-center lg:items-center lg:space-x-8 lg:overflow-x-auto">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex lg:space-x-8 gap-4 lg:gap-0">
-                {categories.map((category, index) => (
-                  <div 
-                    key={index} 
-                    className="flex flex-col lg:flex-col items-center text-center cursor-pointer group hover:transform hover:scale-105 transition-all duration-200 p-4 rounded-2xl hover:bg-gray-50 lg:flex-shrink-0"
-                  >
-                    <div className={`w-16 h-16 lg:w-18 lg:h-18 ${category.color} rounded-full flex items-center justify-center mb-3 shadow-md group-hover:shadow-lg transition-all duration-200`}>
-                      <span className="text-2xl">{category.icon}</span>
+            <div className="relative lg:flex lg:justify-center lg:items-center">
+              {/* Left Arrow */}
+              <button 
+                onClick={scrollLeft}
+                className="hidden lg:flex absolute left-0 top-1/2 transform -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-lg items-center justify-center hover:shadow-xl transition-all duration-200 border border-gray-200 hover:border-gray-300"
+              >
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              {/* Scrollable Categories Container */}
+              <div 
+                ref={scrollRef}
+                className="lg:flex lg:justify-start lg:items-center lg:overflow-x-auto lg:scrollbar-hide lg:mx-12"
+                style={{
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none',
+                }}
+              >
+                <div 
+                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:flex lg:space-x-8 gap-4 lg:gap-0"
+                  style={{
+                    WebkitOverflowScrolling: 'touch',
+                  }}
+                >
+                  {categories.map((category, index) => (
+                    <div 
+                      key={index} 
+                      className="flex flex-col lg:flex-col items-center text-center cursor-pointer group hover:transform hover:scale-105 transition-all duration-200 p-4 rounded-2xl hover:bg-gray-50 lg:flex-shrink-0"
+                    >
+                      <div className={`w-16 h-16 lg:w-18 lg:h-18 ${category.color} rounded-full flex items-center justify-center mb-3 shadow-md group-hover:shadow-lg transition-all duration-200`}>
+                        <span className="text-2xl">{category.icon}</span>
+                      </div>
+                      <h3 className="text-sm font-medium text-gray-900 mb-1 line-clamp-1 whitespace-nowrap">
+                        {category.name}
+                      </h3>
+                      <p className="text-xs text-gray-500">
+                        ({category.count.toLocaleString()})
+                      </p>
                     </div>
-                    <h3 className="text-sm font-medium text-gray-900 mb-1 line-clamp-1 whitespace-nowrap">
-                      {category.name}
-                    </h3>
-                    <p className="text-xs text-gray-500">
-                      ({category.count.toLocaleString()})
-                    </p>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
+
+              {/* Right Arrow */}
+              <button 
+                onClick={scrollRight}
+                className="hidden lg:flex absolute right-0 top-1/2 transform -translate-y-1/2 z-10 w-10 h-10 bg-white rounded-full shadow-lg items-center justify-center hover:shadow-xl transition-all duration-200 border border-gray-200 hover:border-gray-300"
+              >
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
             </div>
           </div>
         </section>
