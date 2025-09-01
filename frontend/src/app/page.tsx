@@ -1,10 +1,27 @@
 "use client";
 
 import MainLayout from '@/components/layout/MainLayout';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 export default function Home() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [selectedCategory, setSelectedCategory] = useState('Select Category');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -17,6 +34,16 @@ export default function Home() {
       scrollRef.current.scrollBy({ left: 200, behavior: 'smooth' });
     }
   };
+
+  const dropdownCategories = [
+    { name: 'Select Category', value: '' },
+    { name: 'Vehicles', value: 'vehicles', icon: '🚗' },
+    { name: 'Property', value: 'property', icon: '🏠' },
+    { name: 'Electronics', value: 'electronics', icon: '📱' },
+    { name: 'Mobile', value: 'mobile', icon: '📞' },
+    { name: 'Jobs', value: 'jobs', icon: '💼' },
+    { name: 'Services', value: 'services', icon: '🔧' },
+  ];
 
   const categories = [
     { name: "Vehicles", count: 1500, color: "bg-red-500", icon: "🚗" },
@@ -32,12 +59,19 @@ export default function Home() {
   ];
 
   const sampleAds = [
-    { id: 1, title: "Sample Ad 1", price: "Rs. 50,000", image: "", isFavorite: false },
-    { id: 2, title: "Sample Ad 2", price: "Rs. 25,000", image: "", isFavorite: false },
-    { id: 3, title: "Sample Ad 3", price: "Rs. 75,000", image: "", isFavorite: true },
-    { id: 4, title: "Sample Ad 4", price: "Rs. 30,000", image: "", isFavorite: false },
-    { id: 5, title: "Sample Ad 5", price: "Rs. 85,000", image: "", isFavorite: false },
-    { id: 6, title: "Sample Ad 6", price: "Rs. 15,000", image: "", isFavorite: false },
+    { id: 1, title: "Toyota Corolla 2018", price: "Rs. 3,500,000", image: "", isFavorite: false },
+    { id: 2, title: "Honda Civic 2019", price: "Rs. 4,200,000", image: "", isFavorite: false },
+    { id: 3, title: "Suzuki Alto 2020", price: "Rs. 1,850,000", image: "", isFavorite: true },
+    { id: 4, title: "Nissan Leaf 2021", price: "Rs. 5,200,000", image: "", isFavorite: false },
+    { id: 5, title: "BMW X3 2019", price: "Rs. 8,500,000", image: "", isFavorite: false },
+  ];
+
+  const propertyAds = [
+    { id: 11, title: "3BR House in Colombo", price: "Rs. 25,000,000", image: "", isFavorite: false },
+    { id: 12, title: "2BR Apartment Kandy", price: "Rs. 12,000,000", image: "", isFavorite: true },
+    { id: 13, title: "Land in Galle", price: "Rs. 8,500,000", image: "", isFavorite: false },
+    { id: 14, title: "Office Space Negombo", price: "Rs. 15,000,000", image: "", isFavorite: false },
+    { id: 15, title: "Villa in Panadura", price: "Rs. 35,000,000", image: "", isFavorite: false },
   ];
 
   return (
@@ -88,22 +122,63 @@ export default function Home() {
                     color: 'var(--text-primary)'
                   }}
                 />
-                <select 
-                  className="pl-6 pr-3 py-4 rounded-3xl border-0 focus:outline-none sm:min-w-[180px]"
-                  style={{ 
-                    backgroundColor: 'var(--surface-input)',
-                    color: 'var(--text-primary)'
-                  }}
-                >
-                  <option>Select Category</option>
-                  <option>Vehicles</option>
-                  <option>Property</option>
-                  <option>Electronics</option>
-                  <option>Mobile</option>
-                  <option>Jobs</option>
-                  <option>Services</option>
-                </select>
-                <button className="bg-green-500 text-white p-4 rounded-full hover:bg-green-600 transition-all duration-180 flex items-center justify-center font-medium shadow-md hover:shadow-lg">
+                
+                {/* Custom Glass UI Dropdown */}
+                <div ref={dropdownRef} className="relative sm:min-w-[180px]">
+                  <button
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="w-full pl-6 pr-3 py-4 rounded-3xl border-0 focus:outline-none flex items-center justify-between glass-dropdown"
+                    style={{ 
+                      backgroundColor: 'var(--surface-input)',
+                      color: 'var(--text-primary)'
+                    }}
+                  >
+                    <div className="flex items-center space-x-2">
+                      {dropdownCategories.find(cat => cat.name === selectedCategory)?.icon && (
+                        <span className="text-sm">
+                          {dropdownCategories.find(cat => cat.name === selectedCategory)?.icon}
+                        </span>
+                      )}
+                      <span className="text-sm">{selectedCategory}</span>
+                    </div>
+                    <svg 
+                      className={`w-4 h-4 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : ''}`}
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {/* Glass UI Dropdown Menu */}
+                  {isDropdownOpen && (
+                    <div className="absolute top-full left-0 right-0 mt-2 glass-dropdown-menu rounded-2xl overflow-hidden shadow-2xl z-50">
+                      <div className="py-2">
+                        {dropdownCategories.map((category, index) => (
+                          <button
+                            key={index}
+                            onClick={() => {
+                              setSelectedCategory(category.name);
+                              setIsDropdownOpen(false);
+                            }}
+                            className="w-full px-4 py-3 text-left hover:bg-white/20 transition-all duration-200 flex items-center space-x-3 group"
+                            style={{ color: 'var(--text-primary)' }}
+                          >
+                            {category.icon && (
+                              <span className="text-lg group-hover:scale-110 transition-transform duration-200">
+                                {category.icon}
+                              </span>
+                            )}
+                            <span className="text-sm font-medium">{category.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <button className="bg-green-500 text-white p-4 rounded-full hover:bg-green-600 transition-all duration-200 flex items-center justify-center font-medium shadow-md hover:shadow-lg">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
@@ -236,7 +311,7 @@ export default function Home() {
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 flex items-center">
                   🏠 Property
-                  <span className="ml-3 text-lg text-gray-500 font-normal">({sampleAds.length * 150} ads)</span>
+                  <span className="ml-3 text-lg text-gray-500 font-normal">({propertyAds.length * 150} ads)</span>
                 </h2>
                 <button className="text-green-500 hover:text-green-600 font-semibold flex items-center transition-colors">
                   View All
@@ -248,8 +323,8 @@ export default function Home() {
               
               {/* Responsive Ad Grid */}
               <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-5 gap-3 lg:gap-4">
-                {sampleAds.map((ad) => (
-                  <div key={`property-${ad.id}`} className="bg-white rounded-xl border border-gray-200 overflow-hidden group hover:shadow-xl hover:border-orange-200 transition-all duration-300 hover:-translate-y-1">
+                {propertyAds.map((ad) => (
+                  <div key={ad.id} className="bg-white rounded-2xl border border-gray-200 overflow-hidden group hover:shadow-xl hover:border-orange-200 transition-all duration-300 hover:-translate-y-1">
                     {/* Ad Image Placeholder */}
                     <div className="aspect-square bg-gradient-to-br from-blue-100 to-blue-200 relative overflow-hidden">
                       <div className="absolute inset-0 bg-blue-300 animate-pulse"></div>
