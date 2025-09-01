@@ -27,28 +27,57 @@ export default function Home() {
     <MainLayout showSidebar={false} showFooter={true}>
       <div className="min-h-screen">
         {/* Hero Section with Quote and Search */}
-        <section className="bg-gradient-to-b from-white to-gray-50 py-16 lg:py-20">
+        <section 
+          className="py-16 lg:py-20"
+          style={{ 
+            background: 'linear-gradient(to bottom, var(--bg-base), var(--surface-muted))'
+          }}
+        >
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             {/* Hero Quote */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-2">
+            <h1 
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-2"
+              style={{ color: 'var(--text-primary)' }}
+            >
               The Largest Market Place in
             </h1>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-orange-500 mb-6">
+            <h2 
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+              style={{ color: 'var(--brand-color)' }}
+            >
               Sri Lanka
             </h2>
-            <p className="text-xl lg:text-2xl text-gray-600 mb-16 max-w-2xl mx-auto">
+            <p 
+              className="text-xl lg:text-2xl mb-16 max-w-2xl mx-auto"
+              style={{ color: 'var(--text-secondary)' }}
+            >
               Buy and Sell anything, anywhere, anytime
             </p>
 
             {/* Search Section */}
             <div className="w-full max-w-4xl mx-auto">
-              <div className="flex flex-col sm:flex-row gap-3 bg-white rounded-2xl border border-gray-200 p-3 shadow-lg hover:shadow-xl transition-shadow">
+              <div 
+                className="flex flex-col sm:flex-row gap-3 rounded-3xl p-3 shadow-lg hover:shadow-xl transition-shadow"
+                style={{ 
+                  backgroundColor: 'var(--bg-elevated)'
+                }}
+              >
                 <input
                   type="text"
                   placeholder="Search anything..."
-                  className="flex-1 px-6 py-4 rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-700 placeholder-gray-400 bg-gray-50"
+                  className="flex-1 px-6 py-4 rounded-3xl border-0 focus:outline-none placeholder-gray-400"
+                  style={{ 
+                    backgroundColor: 'var(--surface-input)',
+                    color: 'var(--text-primary)'
+                  }}
                 />
-                <select className="px-6 py-4 rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-700 bg-gray-50 sm:min-w-[180px]">
+                <select 
+                  className="px-6 py-4 rounded-3xl border-0 focus:outline-none sm:min-w-[180px]"
+                  style={{ 
+                    backgroundColor: 'var(--surface-input)',
+                    color: 'var(--text-primary)'
+                  }}
+                >
                   <option>Select Category</option>
                   <option>Vehicles</option>
                   <option>Property</option>
@@ -57,11 +86,10 @@ export default function Home() {
                   <option>Jobs</option>
                   <option>Services</option>
                 </select>
-                <button className="bg-green-500 text-white px-8 py-4 rounded-xl hover:bg-green-600 transition-all duration-200 flex items-center justify-center font-medium shadow-md hover:shadow-lg">
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button className="bg-green-500 text-white p-4 rounded-full hover:bg-green-600 transition-all duration-200 flex items-center justify-center font-medium shadow-md hover:shadow-lg">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
-                  <span className="hidden sm:inline">Search</span>
                 </button>
               </div>
             </div>
@@ -77,9 +105,9 @@ export default function Home() {
                 {categories.map((category, index) => (
                   <div 
                     key={index} 
-                    className="flex flex-col lg:flex-col items-center text-center cursor-pointer group hover:transform hover:scale-105 transition-all duration-200 p-4 rounded-xl hover:bg-gray-50 lg:flex-shrink-0"
+                    className="flex flex-col lg:flex-col items-center text-center cursor-pointer group hover:transform hover:scale-105 transition-all duration-200 p-4 rounded-2xl hover:bg-gray-50 lg:flex-shrink-0"
                   >
-                    <div className={`w-16 h-16 lg:w-18 lg:h-18 ${category.color} rounded-2xl flex items-center justify-center mb-3 shadow-md group-hover:shadow-lg transition-all duration-200`}>
+                    <div className={`w-16 h-16 lg:w-18 lg:h-18 ${category.color} rounded-full flex items-center justify-center mb-3 shadow-md group-hover:shadow-lg transition-all duration-200`}>
                       <span className="text-2xl">{category.icon}</span>
                     </div>
                     <h3 className="text-sm font-medium text-gray-900 mb-1 line-clamp-1 whitespace-nowrap">
@@ -116,7 +144,7 @@ export default function Home() {
               {/* Responsive Ad Grid */}
               <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 lg:gap-6">
                 {sampleAds.map((ad) => (
-                  <div key={ad.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden group hover:shadow-xl hover:border-orange-200 transition-all duration-300 hover:-translate-y-1">
+                  <div key={ad.id} className="bg-white rounded-2xl border border-gray-200 overflow-hidden group hover:shadow-xl hover:border-orange-200 transition-all duration-300 hover:-translate-y-1">
                     {/* Ad Image Placeholder */}
                     <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gray-300 animate-pulse"></div>
@@ -127,7 +155,7 @@ export default function Home() {
                           <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
                       </button>
-                      <div className="absolute bottom-3 left-3 px-2 py-1 bg-white/90 rounded-lg text-xs font-medium text-gray-700">
+                      <div className="absolute bottom-3 left-3 px-3 py-1.5 bg-white/90 rounded-full text-xs font-medium text-gray-700">
                         Featured
                       </div>
                     </div>
@@ -180,7 +208,7 @@ export default function Home() {
                           <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
                       </button>
-                      <div className="absolute bottom-3 left-3 px-2 py-1 bg-white/90 rounded-lg text-xs font-medium text-gray-700">
+                      <div className="absolute bottom-3 left-3 px-3 py-1.5 bg-white/90 rounded-full text-xs font-medium text-gray-700">
                         New
                       </div>
                     </div>

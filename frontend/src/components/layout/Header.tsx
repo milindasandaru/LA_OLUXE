@@ -44,7 +44,7 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
             {/* Favorites/Saved Ads - Heart Icon */}
             <Link
               href="/favorites"
-              className="text-gray-700 hover:text-red-500 transition-colors p-2"
+              className="text-gray-700 hover:text-red-500 transition-colors p-3 rounded-full hover:bg-gray-100"
               title="Saved Ads"
             >
               <svg
@@ -68,7 +68,7 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
             {/* Post Ad Button */}
             <Link
               href="/post-ad"
-              className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
+              className="bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-3 rounded-full text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg"
             >
               AD Post
             </Link>
@@ -79,14 +79,14 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
             {/* Post Ad Button - Mobile */}
             <Link
               href="/post-ad"
-              className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200"
+              className="bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200 shadow-md"
             >
               Post
             </Link>
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 text-gray-700 hover:text-gray-900 transition-colors"
+              className="p-3 text-gray-700 hover:text-gray-900 transition-colors rounded-full hover:bg-gray-100"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
@@ -101,21 +101,21 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white">
               <Link
                 href="/register"
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                className="block px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Register
               </Link>
               <Link
                 href="/login"
-                className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                className="block px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Login
               </Link>
               <Link
                 href="/favorites"
-                className="flex items-center px-3 py-2 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-md transition-colors"
+                className="flex items-center px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -123,7 +123,7 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
                 </svg>
                 Saved Ads
               </Link>
-              <div className="px-3 py-2 flex items-center">
+              <div className="px-4 py-3 flex items-center">
                 <span className="text-sm text-gray-500 mr-3">Theme:</span>
                 <ThemeToggle />
               </div>

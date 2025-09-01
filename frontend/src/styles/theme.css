@@ -154,6 +154,18 @@
   background-color: var(--brand-color) !important;
 }
 
+/* Dark theme gradient overrides */
+[data-theme="dark"] .bg-gradient-to-b {
+  background: linear-gradient(to bottom, var(--bg-base), var(--surface-muted)) !important;
+}
+
+/* Placeholder text color for dark theme */
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: var(--text-secondary) !important;
+  opacity: 0.7;
+}
+
 /* Base Typography Classes */
 .font-primary {
   font-family: var(--font-family-primary);
