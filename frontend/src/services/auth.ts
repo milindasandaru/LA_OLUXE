@@ -104,6 +104,9 @@ class AuthService {
    */
   async login(data: LoginData): Promise<AuthResponse> {
     try {
+      console.log('Login attempt with:', { email: data.email, password: '[HIDDEN]' });
+      console.log('Calling:', `${this.baseUrl}/login`);
+      
       const response = await fetch(`${this.baseUrl}/login`, {
         method: 'POST',
         headers: {
@@ -112,9 +115,14 @@ class AuthService {
         body: JSON.stringify(data),
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
       const result = await response.json();
+      console.log('Login response:', result);
       
       if (result.success && result.data?.tokens) {
+        console.log('Storing tokens...');
         this.storeTokens(result.data.tokens);
       }
 

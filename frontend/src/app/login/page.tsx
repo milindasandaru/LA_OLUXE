@@ -59,7 +59,9 @@ export default function Login() {
     setIsLoading(true);
     
     try {
+      console.log('Attempting login with:', { email: formData.email });
       const result = await authService.login(formData);
+      console.log('Login result:', result);
       
       if (result.success) {
         // Login successful
@@ -67,6 +69,7 @@ export default function Login() {
         router.push('/'); // Redirect to home page
       } else {
         // Handle login errors
+        console.error('Login failed:', result.message);
         setErrors({ general: result.message });
       }
     } catch (error) {
