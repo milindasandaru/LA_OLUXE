@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+import { authService, User } from '@/services/auth';
 
 interface HeaderProps {
   showSidebar?: boolean;
@@ -11,6 +12,200 @@ interface HeaderProps {
 
 export default function Header({ showSidebar = false, onToggleSidebar }: HeaderProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
+  const checkAuthStatus = async () => {
+    try {
+      if (authService.isAuthenticated()) {
+        const result = await authService.getProfile();
+        if (result.success && result.data?.user) {
+          setUser(result.data.user);
+        }
+      }
+    } catch (error) {
+      console.error('Auth check error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+      setUser(null);
+      setShowUserDropdown(false);
+      // Optionally redirect to home page
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
+  const renderAuthSection = () => {
+    if (isLoading) {
+      return (
+        <div className="hidden md:flex items-center space-x-4">
+          <div className="animate-pulse bg-gray-200 h-8 w-16 rounded"></div>
+          <div className="animate-pulse bg-gray-200 h-8 w-16 rounded"></div>
+        </div>
+      );
+    }
+
+    if (user) {
+      return (
+        <div className="hidden md:flex items-center space-x-4">
+          {/* User dropdown */}
+          <div className="relative">
+            <button
+              onClick={() => setShowUserDropdown(!showUserDropdown)}
+              className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+            >
+              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-semibold">
+                {user.firstName.charAt(0).toUpperCase()}
+              </div>
+              <span>{user.firstName}</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            {/* Dropdown menu */}
+            {showUserDropdown && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200">
+                <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
+                  <p className="font-medium">{user.firstName} {user.lastName}</p>
+                  <p className="text-gray-500 text-xs">{user.email}</p>
+                </div>
+                <Link
+                  href="/profile"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => setShowUserDropdown(false)}
+                >
+                  My Profile
+                </Link>
+                <Link
+                  href="/my-ads"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => setShowUserDropdown(false)}
+                >
+                  My Ads
+                </Link>
+                <Link
+                  href="/favorites"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => setShowUserDropdown(false)}
+                >
+                  Saved Ads
+                </Link>
+                <hr className="my-1" />
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                >
+                  Sign out
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="hidden md:flex items-center space-x-4">
+        {/* Register */}
+        <Link
+          href="/register"
+          className="text-gray-700 hover:text-gray-900 text-sm font-medium transition-colors"
+        >
+          Register
+        </Link>
+
+        {/* Login */}
+        <Link
+          href="/login"
+          className="text-gray-700 hover:text-gray-900 text-sm font-medium transition-colors"
+        >
+          Login
+        </Link>
+      </div>
+    );
+  };
+
+  const renderMobileAuthSection = () => {
+    if (user) {
+      return (
+        <>
+          <div className="px-4 py-3 border-b border-gray-100">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white font-semibold">
+                {user.firstName.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <p className="font-medium text-gray-900">{user.firstName} {user.lastName}</p>
+                <p className="text-sm text-gray-500">{user.email}</p>
+              </div>
+            </div>
+          </div>
+          <Link
+            href="/profile"
+            className="block px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            My Profile
+          </Link>
+          <Link
+            href="/my-ads"
+            className="block px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            My Ads
+          </Link>
+          <Link
+            href="/favorites"
+            className="block px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            Saved Ads
+          </Link>
+          <button
+            onClick={() => {
+              handleLogout();
+              setIsMobileMenuOpen(false);
+            }}
+            className="block w-full text-left px-4 py-3 text-base font-medium text-red-600 hover:text-red-700 hover:bg-gray-50 rounded-xl transition-colors"
+          >
+            Sign out
+          </button>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <Link
+          href="/register"
+          className="block px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          Register
+        </Link>
+        <Link
+          href="/login"
+          className="block px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          Login
+        </Link>
+      </>
+    );
+  };
 
   return (
     <header className="bg-white border-b border-gray-100 sticky top-0 z-50">
@@ -25,42 +220,30 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {/* Register */}
-            <Link
-              href="/register"
-              className="text-gray-700 hover:text-gray-900 text-sm font-medium transition-colors"
-            >
-              Register
-            </Link>
+            {renderAuthSection()}
 
-            {/* Login */}
-            <Link
-              href="/login"
-              className="text-gray-700 hover:text-gray-900 text-sm font-medium transition-colors"
-            >
-              Login
-            </Link>
-
-            {/* Favorites/Saved Ads - Heart Icon */}
-            <Link
-              href="/favorites"
-              className="text-gray-700 hover:text-red-500 transition-colors p-3 rounded-full hover:bg-gray-100"
-              title="Saved Ads"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            {/* Favorites/Saved Ads - Heart Icon (only show if not logged in) */}
+            {!user && (
+              <Link
+                href="/favorites"
+                className="text-gray-700 hover:text-red-500 transition-colors p-3 rounded-full hover:bg-gray-100"
+                title="Saved Ads"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
-              </svg>
-            </Link>
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  />
+                </svg>
+              </Link>
+            )}
 
             {/* Theme Toggle Button */}
             <ThemeToggle />
@@ -99,27 +282,7 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
         {isMobileMenuOpen && (
           <div className="md:hidden border-t border-gray-100">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white">
-              <Link
-                href="/register"
-                className="block px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Register
-              </Link>
-              <Link
-                href="/login"
-                className="block px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Login
-              </Link>
-              <Link
-                href="/favorites"
-                className="block px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Saved Ads
-              </Link>
+              {renderMobileAuthSection()}
               <div className="block px-4 py-3 text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50 rounded-xl transition-colors">
                 Theme
               </div>
@@ -127,6 +290,14 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
           </div>
         )}
       </div>
+
+      {/* Close dropdown when clicking outside */}
+      {showUserDropdown && (
+        <div
+          className="fixed inset-0 z-40"
+          onClick={() => setShowUserDropdown(false)}
+        ></div>
+      )}
     </header>
   );
 }
