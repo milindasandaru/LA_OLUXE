@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import Header from './Header';
-import Footer from './Footer';
+import FooterComponent from './FooterComponent';
 import Sidebar from './Sidebar';
 
 interface MainLayoutProps {
@@ -47,7 +47,7 @@ export default function MainLayout({
       </div>
       
       {/* Footer */}
-      {showFooter && <Footer />}
+      {showFooter && <FooterComponent />}
     </div>
   );
 }
