@@ -614,6 +614,89 @@ class AuthController {
       } as ApiResponse);
     }
   }
+
+  /**
+   * Request password reset
+   */
+  async forgotPassword(req: Request, res: Response): Promise<void> {
+    try {
+      const { email } = req.body;
+
+      const user = await User.findOne({ email });
+      if (!user) {
+        // Don't reveal if user exists or not
+        res.status(200).json({
+          success: true,
+          message: 'If a user with that email exists, a password reset link has been sent.'
+        } as ApiResponse);
+        return;
+      }
+
+      // Generate reset token
+      const resetToken = user.generatePasswordResetToken();
+      await user.save();
+
+      // In development, log the token. In production, send email
+      console.log(`Password reset token for ${email}: ${resetToken}`);
+
+      res.status(200).json({
+        success: true,
+        message: 'If a user with that email exists, a password reset link has been sent.'
+      } as ApiResponse);
+
+    } catch (error) {
+      console.error('Forgot password error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to process password reset request',
+        error: 'Internal server error'
+      } as ApiResponse);
+    }
+  }
+
+  /**
+   * Reset password with token
+   */
+  async resetPassword(req: Request, res: Response): Promise<void> {
+    try {
+      const { token, password } = req.body;
+
+      if (!token || typeof token !== 'string' || token.length !== 64) {
+        res.status(400).json({ success: false, message: 'Invalid reset token' } as ApiResponse);
+        return;
+      }
+
+      const hashed = crypto.createHash('sha256').update(token).digest('hex');
+      const user = await User.findOne({
+        passwordResetToken: hashed,
+        passwordResetExpires: { $gt: new Date() }
+      }).select('+password');
+
+      if (!user) {
+        res.status(400).json({ success: false, message: 'Reset token is invalid or expired' } as ApiResponse);
+        return;
+      }
+
+      // Update password and clear reset token
+      user.password = password;
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+      await user.save();
+
+      res.status(200).json({
+        success: true,
+        message: 'Password has been reset successfully'
+      } as ApiResponse);
+
+    } catch (error) {
+      console.error('Reset password error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Password reset failed',
+        error: 'Internal server error'
+      } as ApiResponse);
+    }
+  }
 }
 
 export const authController = new AuthController();

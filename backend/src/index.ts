@@ -11,6 +11,7 @@ dotenv.config();
 
 // Import routes after env is loaded
 import authRoutes from './routes/auth';
+import userRoutes from './routes/users';
 
 // Initialize JWT utilities
 import { jwtUtil } from './utils/jwt';
@@ -61,6 +62,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

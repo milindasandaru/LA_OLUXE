@@ -10,7 +10,9 @@ import {
   registerValidation,
   loginValidation,
   changePasswordValidation,
-  updateProfileValidation
+  updateProfileValidation,
+  forgotPasswordValidation,
+  resetPasswordValidation
 } from '../utils/validation';
 
 const router = Router();
@@ -157,6 +159,32 @@ router.post(
     next();
   },
   authController.confirmEmailVerification
+);
+
+/**
+ * @route   POST /api/auth/forgot-password
+ * @desc    Request password reset token
+ * @access  Public
+ */
+router.post(
+  '/forgot-password',
+  authLimiter,
+  forgotPasswordValidation,
+  handleValidationErrors,
+  authController.forgotPassword
+);
+
+/**
+ * @route   POST /api/auth/reset-password
+ * @desc    Reset password with token
+ * @access  Public
+ */
+router.post(
+  '/reset-password',
+  authLimiter,
+  resetPasswordValidation,
+  handleValidationErrors,
+  authController.resetPassword
 );
 
 /**
