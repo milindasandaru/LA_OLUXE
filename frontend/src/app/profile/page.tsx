@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import MainLayout from '@/components/layout/MainLayout';
-import { authService, User } from '@/services/auth';
+import authService, { User } from '@/services/auth';
 
 interface ProfileFormData {
   firstName: string;
@@ -131,11 +131,11 @@ export default function Profile() {
     }
 
     try {
-      const result = await authService.changePassword({
-        currentPassword: passwordData.currentPassword,
-        newPassword: passwordData.newPassword,
-        confirmNewPassword: passwordData.confirmNewPassword
-      });
+      const result = await authService.changePassword(
+        passwordData.currentPassword,
+        passwordData.newPassword,
+        passwordData.confirmNewPassword
+      );
 
       if (result.success) {
         setSuccess('Password changed successfully!');
