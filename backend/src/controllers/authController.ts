@@ -68,7 +68,19 @@ class AuthController {
       await user.save();
 
       // Generate JWT tokens
-      const tokens = jwtUtil.generateTokenPair(user);
+      let tokens;
+      try {
+        tokens = jwtUtil.generateTokenPair(user);
+      } catch (err) {
+        console.error('Token generation error:', err instanceof Error ? err.message : err);
+        console.error('Token generation stack:', err instanceof Error && err.stack ? err.stack : err);
+        res.status(500).json({
+          success: false,
+          message: 'Registration failed during token generation',
+          error: err instanceof Error ? err.message : 'Token generation error'
+        } as AuthResponse);
+        return;
+      }
 
       // TODO: Send email verification email
       console.log(`Email verification token for ${email}: ${emailVerificationToken}`);
@@ -95,9 +107,21 @@ class AuthController {
         }
       } as AuthResponse);
 
-    } catch (error) {
-      console.error('Registration error:', error);
-      
+    } catch (error: any) {
+      // Detailed logging for debugging
+      console.error('Registration error:', error instanceof Error ? error.message : error);
+      console.error('Registration stack:', error instanceof Error && error.stack ? error.stack : error);
+
+      // Handle mongoose duplicate key error (email already exists)
+      if (error && error.code === 11000) {
+        res.status(409).json({
+          success: false,
+          message: 'User already exists with this email address',
+          error: 'Duplicate email'
+        } as AuthResponse);
+        return;
+      }
+
       if (error instanceof Error && error.name === 'ValidationError') {
         res.status(400).json({
           success: false,
@@ -105,10 +129,11 @@ class AuthController {
           error: error.message
         } as AuthResponse);
       } else {
+        // In development return the error message to help debugging (remove in production)
         res.status(500).json({
           success: false,
           message: 'Registration failed. Please try again.',
-          error: 'Internal server error'
+          error: error instanceof Error ? error.message : 'Internal server error'
         } as AuthResponse);
       }
     }

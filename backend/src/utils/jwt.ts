@@ -1,4 +1,5 @@
 import jwt, { JwtPayload as JwtPayloadType, SignOptions } from 'jsonwebtoken';
+import crypto from 'crypto';
 import { IUser } from '../models/User';
 
 export interface JwtPayload extends JwtPayloadType {
@@ -34,7 +35,14 @@ class JWTUtil {
     this.refreshTokenExpiry = process.env.JWT_REFRESH_EXPIRY || '7d';
 
     if (!this.accessTokenSecret || !this.refreshTokenSecret) {
-      throw new Error('JWT secrets are not configured in environment variables');
+      // In development create ephemeral secrets to avoid hard crashes when .env isn't present.
+      if ((process.env.NODE_ENV || 'development') === 'development') {
+        console.warn('JWT secrets not found in environment; generating temporary development secrets');
+        this.accessTokenSecret = crypto.randomBytes(48).toString('hex');
+        this.refreshTokenSecret = crypto.randomBytes(64).toString('hex');
+      } else {
+        throw new Error('JWT secrets are not configured in environment variables');
+      }
     }
 
     this.initialized = true;
