@@ -1,0 +1,7 @@
+Connected to MongoDB
+Server running on port 3001
+Environment: development
+API URL: http://localhost:3001/api
+::ffff:127.0.0.1 - - [04/Sep/2025:13:17:25 +0000] "GET /api/health HTTP/1.1" 200 173 "-" "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.5074"
+Email verification token for ts.tester.134014654455378267@example.com: 48120a91b409c2796e2af284a3f3290899746702977b8d86b2e87a6548fe4a36
+::ffff:127.0.0.1 - - [04/Sep/2025:13:17:26 +0000] "POST /api/auth/register HTTP/1.1" 201 1032 "-" "Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.5074"

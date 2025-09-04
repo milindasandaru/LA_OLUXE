@@ -1,5 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 
 // User interface
 export interface IUser extends Document {
@@ -183,9 +184,9 @@ UserSchema.methods.comparePassword = async function(candidatePassword: string): 
 
 // Method to generate password reset token
 UserSchema.methods.generatePasswordResetToken = function(): string {
-  const resetToken = require('crypto').randomBytes(32).toString('hex');
+  const resetToken = crypto.randomBytes(32).toString('hex');
   
-  this.passwordResetToken = require('crypto')
+  this.passwordResetToken = crypto
     .createHash('sha256')
     .update(resetToken)
     .digest('hex');
@@ -197,9 +198,9 @@ UserSchema.methods.generatePasswordResetToken = function(): string {
 
 // Method to generate email verification token
 UserSchema.methods.generateEmailVerificationToken = function(): string {
-  const verificationToken = require('crypto').randomBytes(32).toString('hex');
+  const verificationToken = crypto.randomBytes(32).toString('hex');
   
-  this.emailVerificationToken = require('crypto')
+  this.emailVerificationToken = crypto
     .createHash('sha256')
     .update(verificationToken)
     .digest('hex');
