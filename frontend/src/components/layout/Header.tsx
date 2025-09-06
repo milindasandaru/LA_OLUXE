@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import authService, { User } from '@/services/auth';
 
@@ -15,10 +15,84 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const [showNotificationsDropdown, setShowNotificationsDropdown] = useState(false);
+  const [showMessageModal, setShowMessageModal] = useState(false);
+
+  interface NotificationMessage {
+    id: number;
+    title: string;
+    body: string;
+    read: boolean;
+    timestamp: string; // ISO
+    replies: { id: number; text: string; sender: 'me' | 'system'; at: string }[];
+  }
+
+  const [notifications, setNotifications] = useState<NotificationMessage[]>([
+    {
+      id: 1,
+      title: 'Welcome to ADORA',
+      body: 'Thanks for joining! Your account was created successfully.',
+      read: false,
+      timestamp: new Date().toISOString(),
+      replies: []
+    },
+    {
+      id: 2,
+      title: 'Profile Reminder',
+      body: 'Complete your profile to improve trust and visibility.',
+      read: false,
+      timestamp: new Date(Date.now() - 3600 * 1000).toISOString(),
+      replies: []
+    }
+  ]);
+  const [activeNotification, setActiveNotification] = useState<NotificationMessage | null>(null);
+  const [replyText, setReplyText] = useState('');
+
+  const notifRef = useRef<HTMLDivElement | null>(null);
+  const userRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     checkAuthStatus();
   }, []);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setShowNotificationsDropdown(false);
+      }
+      if (userRef.current && !userRef.current.contains(e.target as Node)) {
+        setShowUserDropdown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+  const openNotification = (id: number) => {
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+    const note = notifications.find(n => n.id === id) || null;
+    setActiveNotification(note);
+    setShowNotificationsDropdown(false);
+    setShowMessageModal(true);
+    setReplyText('');
+  };
+
+  const sendReply = () => {
+    if (!activeNotification || !replyText.trim()) return;
+    setNotifications(prev => prev.map(n => n.id === activeNotification.id ? {
+      ...n,
+      replies: [...n.replies, { id: Date.now(), text: replyText.trim(), sender: 'me', at: new Date().toISOString() }]
+    } : n));
+    setReplyText('');
+  };
+
+  const closeModal = () => {
+    setShowMessageModal(false);
+    setActiveNotification(null);
+  };
 
   const checkAuthStatus = async () => {
     try {
@@ -224,17 +298,54 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
 
             {/* Notification Bell (only when logged in) */}
             {user && (
-              <Link
-                href="/notifications"
-                className="relative text-gray-700 hover:text-gray-900 transition-colors p-3 rounded-full hover:bg-gray-100"
-                title="Notifications"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-                {/* Placeholder badge (can be wired later) */}
-                <span className="absolute top-2 right-2 inline-flex h-2 w-2 rounded-full bg-red-500"></span>
-              </Link>
+              <div className="relative" ref={notifRef}>
+                <button
+                  onClick={() => setShowNotificationsDropdown(p => !p)}
+                  className="relative text-gray-700 hover:text-gray-900 transition-colors p-3 rounded-full hover:bg-gray-100"
+                  title="Notifications"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                  {unreadCount > 0 && (
+                    <span className="absolute top-2 right-2 inline-flex items-center justify-center h-4 min-w-4 px-1 text-[10px] font-semibold rounded-full bg-red-500 text-white">{unreadCount}</span>
+                  )}
+                </button>
+                {showNotificationsDropdown && (
+                  <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded-md shadow-lg z-50 overflow-hidden">
+                    <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100">
+                      <span className="text-sm font-semibold text-gray-700">Notifications</span>
+                      {unreadCount > 0 && (
+                        <button
+                          onClick={() => setNotifications(prev => prev.map(n => ({ ...n, read: true })))}
+                          className="text-xs text-blue-600 hover:underline"
+                        >Mark all read</button>
+                      )}
+                    </div>
+                    <div className="max-h-80 overflow-y-auto divide-y divide-gray-100">
+                      {notifications.map(note => (
+                        <button
+                          key={note.id}
+                          onClick={() => openNotification(note.id)}
+                          className={`w-full text-left px-4 py-3 hover:bg-gray-50 focus:outline-none transition-colors ${note.read ? 'bg-white' : 'bg-blue-50'}`}
+                        >
+                          <div className="flex items-start">
+                            <div className="flex-1">
+                              <p className={`text-sm font-medium ${note.read ? 'text-gray-800' : 'text-blue-700'}`}>{note.title}</p>
+                              <p className="text-xs text-gray-500 line-clamp-2 mt-0.5">{note.body}</p>
+                            </div>
+                            {!note.read && <span className="ml-2 mt-1 h-2 w-2 rounded-full bg-blue-500"></span>}
+                          </div>
+                          <p className="mt-1 text-[10px] text-gray-400">{new Date(note.timestamp).toLocaleTimeString()}</p>
+                        </button>
+                      ))}
+                      {notifications.length === 0 && (
+                        <div className="px-4 py-8 text-center text-sm text-gray-500">No notifications</div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
 
             {/* Theme Toggle Button */}
@@ -244,16 +355,48 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
           {/* Mobile menu button + notifications (if logged in) */}
           <div className="md:hidden flex items-center space-x-2">
             {user && (
-              <Link
-                href="/notifications"
-                className="relative text-gray-700 hover:text-gray-900 transition-colors p-3 rounded-full hover:bg-gray-100"
-                title="Notifications"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-                <span className="absolute top-2 right-2 inline-flex h-2 w-2 rounded-full bg-red-500"></span>
-              </Link>
+              <div className="relative" ref={notifRef}>
+                <button
+                  onClick={() => setShowNotificationsDropdown(p => !p)}
+                  className="relative text-gray-700 hover:text-gray-900 transition-colors p-3 rounded-full hover:bg-gray-100"
+                  title="Notifications"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                  {unreadCount > 0 && (
+                    <span className="absolute top-2 right-2 inline-flex items-center justify-center h-4 min-w-4 px-1 text-[10px] font-semibold rounded-full bg-red-500 text-white">{unreadCount}</span>
+                  )}
+                </button>
+                {showNotificationsDropdown && (
+                  <div className="absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-md shadow-lg z-50 overflow-hidden">
+                    <div className="flex items-center justify-between px-4 py-2 border-b border-gray-100">
+                      <span className="text-sm font-semibold text-gray-700">Notifications</span>
+                      {unreadCount > 0 && (
+                        <button
+                          onClick={() => setNotifications(prev => prev.map(n => ({ ...n, read: true })))}
+                          className="text-xs text-blue-600 hover:underline"
+                        >Mark all read</button>
+                      )}
+                    </div>
+                    <div className="max-h-72 overflow-y-auto divide-y divide-gray-100">
+                      {notifications.map(note => (
+                        <button
+                          key={note.id}
+                          onClick={() => openNotification(note.id)}
+                          className={`w-full text-left px-4 py-3 hover:bg-gray-50 focus:outline-none transition-colors ${note.read ? 'bg-white' : 'bg-blue-50'}`}
+                        >
+                          <p className={`text-sm font-medium ${note.read ? 'text-gray-800' : 'text-blue-700'}`}>{note.title}</p>
+                          <p className="text-xs text-gray-500 line-clamp-2 mt-0.5">{note.body}</p>
+                        </button>
+                      ))}
+                      {notifications.length === 0 && (
+                        <div className="px-4 py-8 text-center text-sm text-gray-500">No notifications</div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -285,6 +428,56 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
           className="fixed inset-0 z-40"
           onClick={() => setShowUserDropdown(false)}
         ></div>
+      )}
+
+      {/* Message Modal */}
+      {showMessageModal && activeNotification && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/40 p-4">
+          <div className="bg-white w-full max-w-lg rounded-lg shadow-xl border border-gray-200 flex flex-col max-h-[85vh]">
+            <div className="px-5 py-3 border-b border-gray-100 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-800">{activeNotification.title}</h2>
+              <button
+                onClick={closeModal}
+                className="p-2 rounded-md text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+            <div className="px-5 py-4 overflow-y-auto flex-1 space-y-4">
+              <div className="bg-gray-50 rounded-md p-3 text-sm text-gray-700 leading-relaxed">
+                {activeNotification.body}
+              </div>
+              {activeNotification.replies.length > 0 && (
+                <div className="space-y-2">
+                  {activeNotification.replies.map(r => (
+                    <div key={r.id} className={`flex ${r.sender === 'me' ? 'justify-end' : 'justify-start'}`}>                    
+                      <div className={`px-3 py-2 rounded-md text-xs max-w-[75%] ${r.sender === 'me' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-800'}`}>                    
+                        <p>{r.text}</p>
+                        <span className="block mt-1 text-[10px] opacity-70">{new Date(r.at).toLocaleTimeString()}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="px-5 py-3 border-t border-gray-100 bg-gray-50">
+              <div className="flex items-end space-x-2">
+                <textarea
+                  value={replyText}
+                  onChange={e => setReplyText(e.target.value)}
+                  rows={2}
+                  placeholder="Type your reply..."
+                  className="flex-1 resize-none text-sm px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  onClick={sendReply}
+                  disabled={!replyText.trim()}
+                  className="h-10 px-4 rounded-md bg-blue-600 disabled:bg-blue-300 text-white text-sm font-medium hover:bg-blue-700 transition-colors"
+                >Send</button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </header>
   );
