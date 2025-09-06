@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { useState } from 'react';
 import Header from './Header';
 import FooterComponent from './FooterComponent';
 import Sidebar from './Sidebar';
@@ -16,6 +16,10 @@ export default function MainLayout({
   showFooter = true,
   className = ''
 }: MainLayoutProps) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setSidebarOpen(o => !o);
+  const closeSidebar = () => setSidebarOpen(false);
   return (
     <div 
       className="min-h-screen flex flex-col transition-colors duration-300"
@@ -24,26 +28,14 @@ export default function MainLayout({
       }}
     >
       {/* Header */}
-      <Header 
-        showSidebar={showSidebar} 
-      />
+      <Header showSidebar={showSidebar} onToggleSidebar={toggleSidebar} />
       
       {/* Main Content Area */}
-      <div className="flex flex-1">
-        {/* Sidebar */}
+      <div className="flex flex-1 relative">
         {showSidebar && (
-          <div className="w-64 flex-shrink-0">
-            <Sidebar 
-              isOpen={true}
-              onClose={() => {}}
-            />
-          </div>
+          <Sidebar isOpen={sidebarOpen || false} onClose={closeSidebar} />
         )}
-        
-        {/* Main Content */}
-        <main className={`flex-1 ${showSidebar ? 'lg:ml-0' : ''} ${className}`}>
-          {children}
-        </main>
+        <main className={`flex-1 ${className} p-2 sm:p-4`}>{children}</main>
       </div>
       
       {/* Footer */}

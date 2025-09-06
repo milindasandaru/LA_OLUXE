@@ -32,22 +32,42 @@ const io = new SocketIOServer(server, {
 interface SocketUserMeta { userId: string; email: string; }
 const onlineUsers = new Map<string, SocketUserMeta>();
 
+// Simple auth via query token (improve later with proper handshake auth)
+io.use((socket, next) => {
+  next();
+});
+
+const userRoom = (userId: string) => `user:${userId}`;
+
 io.on('connection', (socket: Socket) => {
-  // Client should emit 'auth' with token after connect; for now accept anonymous
   socket.on('registerUser', (data: SocketUserMeta) => {
     onlineUsers.set(socket.id, data);
+    if (data.userId) {
+      socket.join(userRoom(data.userId));
+    }
     socket.emit('registered', { success: true });
   });
 
   socket.on('sendReply', (payload: { notificationId: string; text: string }) => {
-    // Broadcast to sender only (echo) for now; later add per-user rooms
-    socket.emit('newReply', { ...payload, at: new Date().toISOString(), sender: 'system' });
+    const meta = onlineUsers.get(socket.id);
+    const reply = { ...payload, at: new Date().toISOString(), sender: 'system' };
+    // Echo back to sender
+    socket.emit('newReply', reply);
+    // Future: find recipient and emit to their room
+    if (meta?.userId) {
+      io.to(userRoom(meta.userId)).emit('replyAck', { notificationId: payload.notificationId });
+    }
   });
 
   socket.on('disconnect', () => {
     onlineUsers.delete(socket.id);
   });
 });
+
+// Helper to emit new notification (exportable later)
+export const emitNotification = (userId: string, notification: any) => {
+  io.to(userRoom(userId)).emit('notification', notification);
+};
 const PORT = process.env.PORT || 3001;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/adora-lk';
 
