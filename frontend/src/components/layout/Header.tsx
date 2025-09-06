@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
+import { io, Socket } from 'socket.io-client';
 import { createPortal } from 'react-dom';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import authService, { User } from '@/services/auth';
@@ -49,6 +50,7 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
   ]);
   const [activeNotification, setActiveNotification] = useState<NotificationMessage | null>(null);
   const [replyText, setReplyText] = useState('');
+  const socketRef = useRef<Socket | null>(null);
 
   // Separate refs for desktop & mobile notification containers to avoid ref overwrite
   const notifRefDesktop = useRef<HTMLDivElement | null>(null);
@@ -58,6 +60,24 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
   useEffect(() => {
     checkAuthStatus();
     setMounted(true);
+    // Initialize socket only on client after mount when authenticated
+    if (!socketRef.current && typeof window !== 'undefined' && authService.isAuthenticated()) {
+      const base = process.env.NEXT_PUBLIC_API_URL?.replace(/\/api$/, '') || 'http://localhost:3001';
+      const s = io(base, { transports: ['websocket'], withCredentials: true });
+      socketRef.current = s;
+      s.on('connect', () => {
+        if (user) {
+          s.emit('registerUser', { userId: user._id, email: user.email });
+        }
+      });
+      s.on('newReply', (payload: any) => {
+        // For now echo reply to active notification
+        setNotifications(prev => prev.map(n => n.id.toString() === payload.notificationId ? {
+          ...n,
+          replies: [...n.replies, { id: Date.now(), text: payload.text, sender: 'system', at: payload.at }]
+        } : n));
+      });
+    }
   }, []);
 
   // Close dropdowns when clicking outside
@@ -113,6 +133,10 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
       ...n,
       replies: [...n.replies, { id: Date.now(), text: replyText.trim(), sender: 'me', at: new Date().toISOString() }]
     } : n));
+    // Emit via socket to simulate server processing (notificationId as string)
+    if (socketRef.current) {
+      socketRef.current.emit('sendReply', { notificationId: activeNotification.id.toString(), text: replyText.trim() });
+    }
     setReplyText('');
   };
 
@@ -321,7 +345,8 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </div>
-          <div className="px-5 py-4 overflow-y-auto flex-1 space-y-4">
+          <div className="px-5 py-4 flex-1 space-y-4 overflow-hidden">
+            <div className="overflow-y-auto space-y-4 pr-1 custom-scrollbar max-h-[40vh]">
             <div className="bg-gray-50 rounded-md p-3 text-sm text-gray-700 leading-relaxed">
               {activeNotification.body}
             </div>
@@ -337,6 +362,7 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
                 ))}
               </div>
             )}
+            </div>
           </div>
           <div className="px-5 py-3 border-t border-gray-100 bg-gray-50">
             <div className="flex items-end space-x-2">

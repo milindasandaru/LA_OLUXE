@@ -1,4 +1,6 @@
 import express from 'express';
+import http from 'http';
+import { Server as SocketIOServer, Socket } from 'socket.io';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -18,6 +20,34 @@ import { jwtUtil } from './utils/jwt';
 jwtUtil.init();
 
 const app = express();
+// Create HTTP server & Socket.IO layer
+const server = http.createServer(app);
+const io = new SocketIOServer(server, {
+  cors: {
+    origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : ['http://localhost:3000','http://localhost:3002'],
+    credentials: true
+  }
+});
+
+interface SocketUserMeta { userId: string; email: string; }
+const onlineUsers = new Map<string, SocketUserMeta>();
+
+io.on('connection', (socket: Socket) => {
+  // Client should emit 'auth' with token after connect; for now accept anonymous
+  socket.on('registerUser', (data: SocketUserMeta) => {
+    onlineUsers.set(socket.id, data);
+    socket.emit('registered', { success: true });
+  });
+
+  socket.on('sendReply', (payload: { notificationId: string; text: string }) => {
+    // Broadcast to sender only (echo) for now; later add per-user rooms
+    socket.emit('newReply', { ...payload, at: new Date().toISOString(), sender: 'system' });
+  });
+
+  socket.on('disconnect', () => {
+    onlineUsers.delete(socket.id);
+  });
+});
 const PORT = process.env.PORT || 3001;
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/adora-lk';
 
@@ -157,8 +187,8 @@ mongoose.connect(MONGODB_URI)
     console.log('Connected to MongoDB');
     
     // Start server
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+    server.listen(PORT, () => {
+      console.log(`Server + Socket.IO running on port ${PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
       console.log(`API URL: http://localhost:${PORT}/api`);
     });
