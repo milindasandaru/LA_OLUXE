@@ -69,9 +69,6 @@ class AuthService {
     this.baseUrl = `${API_BASE_URL}/auth`;
   }
 
-  /**
-   * Register a new user
-   */
   async register(data: RegisterData): Promise<AuthResponse> {
     try {
       const response = await fetch(`${this.baseUrl}/register`, {
@@ -99,14 +96,8 @@ class AuthService {
     }
   }
 
-  /**
-   * Login user
-   */
   async login(data: LoginData): Promise<AuthResponse> {
     try {
-      console.log('Login attempt with:', { email: data.email, password: '[HIDDEN]' });
-      console.log('Calling:', `${this.baseUrl}/login`);
-      
       const response = await fetch(`${this.baseUrl}/login`, {
         method: 'POST',
         headers: {
@@ -115,14 +106,9 @@ class AuthService {
         body: JSON.stringify(data),
       });
 
-      console.log('Response status:', response.status);
-      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
-
       const result = await response.json();
-      console.log('Login response:', result);
       
       if (result.success && result.data?.tokens) {
-        console.log('Storing tokens...');
         this.storeTokens(result.data.tokens);
       }
 
@@ -137,9 +123,6 @@ class AuthService {
     }
   }
 
-  /**
-   * Get current user profile
-   */
   async getProfile(): Promise<ApiResponse> {
     try {
       const token = this.getAccessToken();
@@ -152,7 +135,7 @@ class AuthService {
         };
       }
 
-      const response = await fetch(`${this.baseUrl}/profile`, {
+      const response = await fetch(`${API_BASE_URL}/users/me`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -171,9 +154,6 @@ class AuthService {
     }
   }
 
-  /**
-   * Update user profile
-   */
   async updateProfile(data: Partial<User>): Promise<ApiResponse> {
     try {
       const token = this.getAccessToken();
@@ -186,7 +166,7 @@ class AuthService {
         };
       }
 
-      const response = await fetch(`${this.baseUrl}/profile`, {
+      const response = await fetch(`${API_BASE_URL}/users/me`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -206,9 +186,6 @@ class AuthService {
     }
   }
 
-  /**
-   * Change password
-   */
   async changePassword(currentPassword: string, newPassword: string, confirmNewPassword: string): Promise<ApiResponse> {
     try {
       const token = this.getAccessToken();
@@ -245,9 +222,100 @@ class AuthService {
     }
   }
 
-  /**
-   * Refresh access token
-   */
+  async requestEmailVerification(): Promise<ApiResponse> {
+    try {
+      const token = this.getAccessToken();
+      
+      if (!token) {
+        return {
+          success: false,
+          message: 'No access token found',
+          error: 'Authentication required'
+        };
+      }
+
+      const response = await fetch(`${this.baseUrl}/request-email-verification`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error('Request email verification error:', error);
+      return {
+        success: false,
+        message: 'Failed to request email verification',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  async confirmEmailVerification(token: string): Promise<ApiResponse> {
+    try {
+      const response = await fetch(`${this.baseUrl}/confirm-email-verification`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token }),
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error('Confirm email verification error:', error);
+      return {
+        success: false,
+        message: 'Failed to confirm email verification',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  async forgotPassword(email: string): Promise<ApiResponse> {
+    try {
+      const response = await fetch(`${this.baseUrl}/forgot-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error('Forgot password error:', error);
+      return {
+        success: false,
+        message: 'Failed to request password reset',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
+  async resetPassword(token: string, password: string, confirmPassword: string): Promise<ApiResponse> {
+    try {
+      const response = await fetch(`${this.baseUrl}/reset-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token, password, confirmPassword }),
+      });
+
+      return await response.json();
+    } catch (error) {
+      console.error('Reset password error:', error);
+      return {
+        success: false,
+        message: 'Failed to reset password',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      };
+    }
+  }
+
   async refreshToken(): Promise<ApiResponse> {
     try {
       const refreshToken = this.getRefreshToken();
@@ -264,8 +332,8 @@ class AuthService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${refreshToken}`,
         },
-        body: JSON.stringify({ refreshToken }),
       });
 
       const result = await response.json();
@@ -285,15 +353,11 @@ class AuthService {
     }
   }
 
-  /**
-   * Logout user
-   */
   async logout(): Promise<ApiResponse> {
     try {
       const token = this.getAccessToken();
       
       if (token) {
-        // Call logout endpoint
         await fetch(`${this.baseUrl}/logout`, {
           method: 'POST',
           headers: {
@@ -303,7 +367,6 @@ class AuthService {
         });
       }
 
-      // Clear local storage regardless of API call result
       this.clearTokens();
 
       return {
@@ -312,19 +375,14 @@ class AuthService {
       };
     } catch (error) {
       console.error('Logout error:', error);
-      // Clear tokens even if API call fails
       this.clearTokens();
-      
       return {
-        success: true, // Still return success since local logout worked
+        success: true,
         message: 'Logged out successfully'
       };
     }
   }
 
-  /**
-   * Verify if token is valid
-   */
   async verifyToken(): Promise<ApiResponse> {
     try {
       const token = this.getAccessToken();
@@ -332,7 +390,8 @@ class AuthService {
       if (!token) {
         return {
           success: false,
-          message: 'No access token found'
+          message: 'No access token found',
+          error: 'Authentication required'
         };
       }
 
@@ -349,15 +408,12 @@ class AuthService {
       console.error('Verify token error:', error);
       return {
         success: false,
-        message: 'Token verification failed',
+        message: 'Failed to verify token',
         error: error instanceof Error ? error.message : 'Unknown error'
       };
     }
   }
 
-  /**
-   * Store tokens in localStorage
-   */
   private storeTokens(tokens: { accessToken: string; refreshToken: string }): void {
     if (typeof window !== 'undefined') {
       localStorage.setItem('accessToken', tokens.accessToken);
@@ -365,9 +421,6 @@ class AuthService {
     }
   }
 
-  /**
-   * Get access token from localStorage
-   */
   getAccessToken(): string | null {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('accessToken');
@@ -375,33 +428,24 @@ class AuthService {
     return null;
   }
 
-  /**
-   * Get refresh token from localStorage
-   */
-  getRefreshToken(): string | null {
+  private getRefreshToken(): string | null {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('refreshToken');
     }
     return null;
   }
 
-  /**
-   * Clear tokens from localStorage
-   */
-  clearTokens(): void {
+  private clearTokens(): void {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
     }
   }
 
-  /**
-   * Check if user is authenticated
-   */
   isAuthenticated(): boolean {
     return !!this.getAccessToken();
   }
 }
 
-export const authService = new AuthService();
+const authService = new AuthService();
 export default authService;

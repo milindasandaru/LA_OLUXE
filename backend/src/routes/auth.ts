@@ -10,7 +10,9 @@ import {
   registerValidation,
   loginValidation,
   changePasswordValidation,
-  updateProfileValidation
+  updateProfileValidation,
+  forgotPasswordValidation,
+  resetPasswordValidation
 } from '../utils/validation';
 
 const router = Router();
@@ -127,6 +129,62 @@ router.put(
   changePasswordValidation,
   handleValidationErrors,
   authController.changePassword
+);
+
+/**
+ * @route   POST /api/auth/request-email-verification
+ * @desc    Request (resend) email verification token
+ * @access  Private
+ */
+router.post(
+  '/request-email-verification',
+  authLimiter,
+  authenticate,
+  authController.requestEmailVerification
+);
+
+/**
+ * @route   POST /api/auth/confirm-email-verification
+ * @desc    Confirm email verification
+ * @access  Public
+ */
+router.post(
+  '/confirm-email-verification',
+  authLimiter,
+  (req, res, next) => { // simple inline validation
+    const { token } = req.body;
+    if (!token || typeof token !== 'string' || token.length !== 64) {
+      return res.status(400).json({ success: false, message: 'Invalid verification token' });
+    }
+    next();
+  },
+  authController.confirmEmailVerification
+);
+
+/**
+ * @route   POST /api/auth/forgot-password
+ * @desc    Request password reset token
+ * @access  Public
+ */
+router.post(
+  '/forgot-password',
+  authLimiter,
+  forgotPasswordValidation,
+  handleValidationErrors,
+  authController.forgotPassword
+);
+
+/**
+ * @route   POST /api/auth/reset-password
+ * @desc    Reset password with token
+ * @access  Public
+ */
+router.post(
+  '/reset-password',
+  authLimiter,
+  resetPasswordValidation,
+  handleValidationErrors,
+  authController.resetPassword
 );
 
 /**

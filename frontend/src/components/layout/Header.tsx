@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import ThemeToggle from '@/components/ui/ThemeToggle';
-import { authService, User } from '@/services/auth';
+import authService, { User } from '@/services/auth';
 
 interface HeaderProps {
   showSidebar?: boolean;

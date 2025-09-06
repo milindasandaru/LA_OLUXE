@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { authService, RegisterData } from '@/services/auth';
+import authService, { RegisterData } from '@/services/auth';
 
 export default function Register() {
   const router = useRouter();

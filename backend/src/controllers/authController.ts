@@ -453,6 +453,15 @@ class AuthController {
         return;
       }
 
+      // Require verified email before allowing password change
+      if (!req.user.isEmailVerified) {
+        res.status(403).json({
+          success: false,
+          message: 'Email not verified. Please verify your email before changing password.'
+        } as ApiResponse);
+        return;
+      }
+
       const { currentPassword, newPassword } = req.body;
 
       // Get user with password field
@@ -518,6 +527,172 @@ class AuthController {
       res.status(500).json({
         success: false,
         message: 'Logout failed',
+        error: 'Internal server error'
+      } as ApiResponse);
+    }
+  }
+
+  /**
+   * Request email verification token (resend)
+   */
+  async requestEmailVerification(req: Request, res: Response): Promise<void> {
+    try {
+      if (!req.user) {
+        res.status(401).json({ success: false, message: 'User not authenticated' } as ApiResponse);
+        return;
+      }
+
+      // If already verified
+      if (req.user.isEmailVerified) {
+        res.status(400).json({ success: false, message: 'Email already verified' } as ApiResponse);
+        return;
+      }
+
+      const user = await User.findById(req.user._id);
+      if (!user) {
+        res.status(404).json({ success: false, message: 'User not found' } as ApiResponse);
+        return;
+      }
+
+      const token = user.generateEmailVerificationToken();
+      await user.save();
+
+      // Placeholder for real email service
+      console.log(`Email verification token for ${user.email}: ${token}`);
+
+      res.status(200).json({
+        success: true,
+        message: 'Verification email sent (development: token logged to server).'
+      } as ApiResponse);
+    } catch (error) {
+      console.error('Request email verification error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to send verification email',
+        error: 'Internal server error'
+      } as ApiResponse);
+    }
+  }
+
+  /**
+   * Confirm email verification with token
+   */
+  async confirmEmailVerification(req: Request, res: Response): Promise<void> {
+    try {
+      const { token } = req.body;
+      if (!token || typeof token !== 'string' || token.length !== 64) {
+        res.status(400).json({ success: false, message: 'Invalid verification token' } as ApiResponse);
+        return;
+      }
+
+      const hashed = crypto.createHash('sha256').update(token).digest('hex');
+      const user = await User.findOne({
+        emailVerificationToken: hashed,
+        emailVerificationExpires: { $gt: new Date() }
+      });
+
+      if (!user) {
+        res.status(400).json({ success: false, message: 'Verification token is invalid or expired' } as ApiResponse);
+        return;
+      }
+
+      user.isEmailVerified = true;
+      user.emailVerificationToken = undefined;
+      user.emailVerificationExpires = undefined;
+      await user.save();
+
+      res.status(200).json({
+        success: true,
+        message: 'Email verified successfully'
+      } as ApiResponse);
+    } catch (error) {
+      console.error('Confirm email verification error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Email verification failed',
+        error: 'Internal server error'
+      } as ApiResponse);
+    }
+  }
+
+  /**
+   * Request password reset
+   */
+  async forgotPassword(req: Request, res: Response): Promise<void> {
+    try {
+      const { email } = req.body;
+
+      const user = await User.findOne({ email });
+      if (!user) {
+        // Don't reveal if user exists or not
+        res.status(200).json({
+          success: true,
+          message: 'If a user with that email exists, a password reset link has been sent.'
+        } as ApiResponse);
+        return;
+      }
+
+      // Generate reset token
+      const resetToken = user.generatePasswordResetToken();
+      await user.save();
+
+      // In development, log the token. In production, send email
+      console.log(`Password reset token for ${email}: ${resetToken}`);
+
+      res.status(200).json({
+        success: true,
+        message: 'If a user with that email exists, a password reset link has been sent.'
+      } as ApiResponse);
+
+    } catch (error) {
+      console.error('Forgot password error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to process password reset request',
+        error: 'Internal server error'
+      } as ApiResponse);
+    }
+  }
+
+  /**
+   * Reset password with token
+   */
+  async resetPassword(req: Request, res: Response): Promise<void> {
+    try {
+      const { token, password } = req.body;
+
+      if (!token || typeof token !== 'string' || token.length !== 64) {
+        res.status(400).json({ success: false, message: 'Invalid reset token' } as ApiResponse);
+        return;
+      }
+
+      const hashed = crypto.createHash('sha256').update(token).digest('hex');
+      const user = await User.findOne({
+        passwordResetToken: hashed,
+        passwordResetExpires: { $gt: new Date() }
+      }).select('+password');
+
+      if (!user) {
+        res.status(400).json({ success: false, message: 'Reset token is invalid or expired' } as ApiResponse);
+        return;
+      }
+
+      // Update password and clear reset token
+      user.password = password;
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+      await user.save();
+
+      res.status(200).json({
+        success: true,
+        message: 'Password has been reset successfully'
+      } as ApiResponse);
+
+    } catch (error) {
+      console.error('Reset password error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Password reset failed',
         error: 'Internal server error'
       } as ApiResponse);
     }
