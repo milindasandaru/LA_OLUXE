@@ -63,12 +63,18 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
     // Initialize socket only on client after mount when authenticated
     if (!socketRef.current && typeof window !== 'undefined' && authService.isAuthenticated()) {
       const base = process.env.NEXT_PUBLIC_API_URL?.replace(/\/api$/, '') || 'http://localhost:3001';
-      const s = io(base, { transports: ['websocket'], withCredentials: true });
+      const s = io(base, { transports: ['websocket', 'polling'], withCredentials: true, path: '/socket.io/' });
       socketRef.current = s;
       s.on('connect', () => {
         if (user) {
           s.emit('registerUser', { userId: user._id, email: user.email });
         }
+      });
+      s.io.on('error', (err: any) => {
+        console.error('[socket.io] manager error', err);
+      });
+      s.on('connect_error', (err) => {
+        console.error('[socket.io] connect_error', err.message);
       });
       s.on('newReply', (payload: any) => {
         // For now echo reply to active notification

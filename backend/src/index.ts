@@ -40,12 +40,14 @@ io.use((socket, next) => {
 const userRoom = (userId: string) => `user:${userId}`;
 
 io.on('connection', (socket: Socket) => {
+  console.log('[socket.io] connection established', { id: socket.id, rooms: [...socket.rooms] });
   socket.on('registerUser', (data: SocketUserMeta) => {
     onlineUsers.set(socket.id, data);
     if (data.userId) {
       socket.join(userRoom(data.userId));
     }
     socket.emit('registered', { success: true });
+    console.log('[socket.io] user registered', { socketId: socket.id, userId: data.userId });
   });
 
   socket.on('sendReply', (payload: { notificationId: string; text: string }) => {
@@ -61,6 +63,15 @@ io.on('connection', (socket: Socket) => {
 
   socket.on('disconnect', () => {
     onlineUsers.delete(socket.id);
+    console.log('[socket.io] disconnect', { id: socket.id });
+  });
+});
+
+io.engine.on('connection_error', (err: any) => {
+  console.error('[socket.io] engine connection error', {
+    code: err.code,
+    message: err.message,
+    context: err.context
   });
 });
 
