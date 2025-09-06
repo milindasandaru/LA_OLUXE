@@ -50,7 +50,9 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
   const [activeNotification, setActiveNotification] = useState<NotificationMessage | null>(null);
   const [replyText, setReplyText] = useState('');
 
-  const notifRef = useRef<HTMLDivElement | null>(null);
+  // Separate refs for desktop & mobile notification containers to avoid ref overwrite
+  const notifRefDesktop = useRef<HTMLDivElement | null>(null);
+  const notifRefMobile = useRef<HTMLDivElement | null>(null);
   const userRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -61,16 +63,35 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
   // Close dropdowns when clicking outside
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      const inDesktopNotif = notifRefDesktop.current?.contains(target);
+      const inMobileNotif = notifRefMobile.current?.contains(target);
+      if (!inDesktopNotif && !inMobileNotif) {
         setShowNotificationsDropdown(false);
       }
-      if (userRef.current && !userRef.current.contains(e.target as Node)) {
+      if (userRef.current && !userRef.current.contains(target)) {
         setShowUserDropdown(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // ESC key handler
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        if (showMessageModal) {
+          closeModal();
+        } else {
+          setShowNotificationsDropdown(false);
+          setShowUserDropdown(false);
+        }
+      }
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [showMessageModal]);
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
@@ -356,7 +377,7 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
 
             {/* Notification Bell (only when logged in) */}
             {user && (
-              <div className="relative" ref={notifRef}>
+              <div className="relative" ref={notifRefDesktop}>
                 <button
                   onClick={() => setShowNotificationsDropdown(p => !p)}
                   className="relative text-gray-700 hover:text-gray-900 transition-colors p-3 rounded-full hover:bg-gray-100"
@@ -375,7 +396,9 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
                       <span className="text-sm font-semibold text-gray-700">Notifications</span>
                       {unreadCount > 0 && (
                         <button
-                          onClick={() => setNotifications(prev => prev.map(n => ({ ...n, read: true })))}
+                          onClick={() => {
+                            setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+                          }}
                           className="text-xs text-blue-600 hover:underline"
                         >Mark all read</button>
                       )}
@@ -413,7 +436,7 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
           {/* Mobile menu button + notifications (if logged in) */}
           <div className="md:hidden flex items-center space-x-2">
             {user && (
-              <div className="relative" ref={notifRef}>
+              <div className="relative" ref={notifRefMobile}>
                 <button
                   onClick={() => setShowNotificationsDropdown(p => !p)}
                   className="relative text-gray-700 hover:text-gray-900 transition-colors p-3 rounded-full hover:bg-gray-100"
@@ -432,7 +455,9 @@ export default function Header({ showSidebar = false, onToggleSidebar }: HeaderP
                       <span className="text-sm font-semibold text-gray-700">Notifications</span>
                       {unreadCount > 0 && (
                         <button
-                          onClick={() => setNotifications(prev => prev.map(n => ({ ...n, read: true })))}
+                          onClick={() => {
+                            setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+                          }}
                           className="text-xs text-blue-600 hover:underline"
                         >Mark all read</button>
                       )}
