@@ -15,6 +15,7 @@ interface NavItem {
   description?: string;
 }
 
+// Only keep the required sidebar items per user request
 const navigationItems: NavItem[] = [
   { name: 'Dashboard', href: '/dashboard', icon: '🏠', description: 'Overview & statistics' },
   { name: 'My Ads', href: '/my-ads', icon: '📝', description: 'Manage your listings' },
@@ -22,18 +23,6 @@ const navigationItems: NavItem[] = [
   { name: 'Messages', href: '/messages', icon: '💬', description: 'Chat with buyers/sellers' },
   { name: 'Profile', href: '/profile', icon: '👤', description: 'Account settings' },
   { name: 'Orders', href: '/orders', icon: '📦', description: 'Purchase history' },
-  { name: 'Notifications', href: '/notifications', icon: '🔔', description: 'Alerts & updates' },
-];
-
-const categoryItems: NavItem[] = [
-  { name: 'Electronics', href: '/ads?category=electronics', icon: '📱' },
-  { name: 'Vehicles', href: '/ads?category=vehicles', icon: '🚗' },
-  { name: 'Property', href: '/ads?category=property', icon: '🏠' },
-  { name: 'Jobs', href: '/ads?category=jobs', icon: '💼' },
-  { name: 'Services', href: '/ads?category=services', icon: '🔧' },
-  { name: 'Fashion', href: '/ads?category=fashion', icon: '👗' },
-  { name: 'Home & Garden', href: '/ads?category=home-garden', icon: '🏡' },
-  { name: 'Sports', href: '/ads?category=sports', icon: '⚽' },
 ];
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
@@ -107,54 +96,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               </div>
             </div>
 
-            {/* Categories */}
-            <div className="px-4 mb-6">
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                Browse Categories
-              </h3>
-              <div className="space-y-1">
-                {categoryItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    onClick={onClose}
-                    className={`group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
-                      isActive(item.href)
-                        ? 'bg-blue-50 text-blue-700'
-                        : 'text-gray-700 hover:text-blue-700 hover:bg-gray-50'
-                    }`}
-                  >
-                    <span className="text-lg mr-3">{item.icon}</span>
-                    <span>{item.name}</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Quick Actions */}
-            <div className="px-4">
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                Quick Actions
-              </h3>
-              <div className="space-y-2">
-                <Link
-                  href="/post-ad"
-                  onClick={onClose}
-                  className="w-full bg-blue-600 text-white text-sm font-medium py-2 px-4 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center"
-                >
-                  <span className="mr-2">➕</span>
-                  Post New Ad
-                </Link>
-                <Link
-                  href="/ads"
-                  onClick={onClose}
-                  className="w-full bg-gray-100 text-gray-700 text-sm font-medium py-2 px-4 rounded-md hover:bg-gray-200 transition-colors flex items-center justify-center"
-                >
-                  <span className="mr-2">🔍</span>
-                  Browse All Ads
-                </Link>
-              </div>
-            </div>
+            {/* Removed categories and quick actions as per requirement */}
           </div>
 
           {/* Footer */}
