@@ -1,3 +1,3 @@
 "# Adora.lk - Improved Marketplace Platform" 
 ###
-"#currently under development"
+"# this project currently under development"
