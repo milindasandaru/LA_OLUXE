@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
     "next": "latest",
@@ -16,6 +16,7 @@
   "devDependencies": {
     "@types/node": "latest",
     "@types/react": "latest",
+    "cross-env": "^10.0.0",
     "eslint": "^9.36.0",
     "eslint-config-next": "^15.5.3",
     "typescript": "latest"
