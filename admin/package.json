@@ -1,0 +1,12 @@
+{
+  "name": "adora-admin",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo admin build placeholder"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "@types/react": "latest"
+  }
+}
