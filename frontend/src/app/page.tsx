@@ -1,3 +1,6 @@
+import Image from "next/image";
+import heroImg from "../../assets/hero_img.jpg";
+
 export default function Home() {
   return (
     <section className="relative isolate">
@@ -34,12 +37,14 @@ export default function Home() {
             </div>
           </div>
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-50 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
-            {/* Image/illustration placeholder */}
-            <div className="absolute inset-0 grid place-items-center">
-              <span className="text-sm text-neutral-500 dark:text-neutral-400">
-                Hero Image Placeholder
-              </span>
-            </div>
+            {/* Hero image (imported for Next.js optimization) */}
+            <Image
+              src={heroImg}
+              alt="Hero image"
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+              fill
+            />
           </div>
         </div>
       </div>
