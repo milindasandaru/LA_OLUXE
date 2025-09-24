@@ -1,4 +1,4 @@
-﻿"use client";
+﻿// Server Component (no hooks used here)
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
