@@ -2,10 +2,10 @@
 
 const Footer = () => {
     return (
-        <div className="flex flex-col sm:grid grid-col-[3fr_1fr_1fr] gap-14 my-10 mt-40 text-sm">
+    <div className="flex flex-col sm:grid sm:grid-cols-[3fr_1fr_1fr] gap-14 my-10 mt-40 text-sm">
 
             <div className="">
-                <h3 className="mb-5 w-32">Adora.lk</h3>
+                <h3 className="mb-5 text-2xl font-semibold">Adora.lk</h3>
                 <p className='w-full md:w-2/3 text-gray-600'>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio repellendus aperiam iure assumenda itaque libero, eaque neque officiis exercitationem reiciendis! Optio asperiores, tenetur dignissimos delectus id adipisci nostrum sint culpa.
                 </p>
@@ -42,8 +42,10 @@ const Footer = () => {
             </div>
 
             <div>
-                <hr />
-                <p className='py-5 text-sm text-center'>Copyright {new Date().getFullYear()}@ Adora.lk - All Right Reserved.</p>
+                <hr className="border-gray-200" />
+                <p className='py-5 text-xs text-center text-gray-500'>
+                    © {new Date().getFullYear()} Adora.lk — All rights reserved.
+                </p>
             </div>
 
         </div>

@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Poppins } from "next/font/google";
 
 export const metadata: Metadata = {
   title: "Adora.lk",
   description: "Premier e-commerce destination",
 };
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
 
 export default function RootLayout({
   children,
@@ -13,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="antialiased">
+      <body className={`antialiased ${poppins.className}`}>
         {children}
       </body>
     </html>
