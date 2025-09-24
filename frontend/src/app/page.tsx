@@ -1,25 +1,27 @@
-﻿import { Route } from 'next';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/ReactToastify.css';
+﻿"use client";
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import Home from './pages/Home';
+import Searchbar from './components/Searchbar';
 
 const Page = () => {
   return (
-    <div className=''>
+    <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
       <ToastContainer />
-    </div>
-  );
-}
 
-export default function Home() {
-  return (
-    <div className="min-h-screen p-8">
-      <main className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Adora.lk</h1>
-        <p className="text-lg text-gray-600">Your premier e-commerce destination</p>
-        <div className="mt-8">
-          <p className="text-gray-500">Frontend application ready for development</p>
-        </div>
+      <Navbar />
+      <Searchbar />
+
+      <main className="mt-8">
+        <Home />
       </main>
+
+      <Footer />
     </div>
   );
-}
+};
+
+export default Page;
