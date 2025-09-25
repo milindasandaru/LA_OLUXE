@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:webpack": "set NEXT_DISABLE_TURBOPACK=1&& next dev",
+    "dev:turbo": "next dev --turbo",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
@@ -13,7 +15,8 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-router-dom": "^7.9.2",
-    "react-toastify": "^11.0.5"
+    "react-toastify": "^11.0.5",
+    "remixicon": "^4.6.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
