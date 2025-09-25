@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Poppins } from "next/font/google";
+import "remixicon/fonts/remixicon.css";
 
 export const metadata: Metadata = {
   title: "Adora.lk",

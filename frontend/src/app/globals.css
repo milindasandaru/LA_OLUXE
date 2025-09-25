@@ -1,5 +1,6 @@
 ﻿@import "tailwindcss";
 
+
 /* Keep globals minimal so Tailwind utilities are obvious */
 :root {
   color-scheme: light;

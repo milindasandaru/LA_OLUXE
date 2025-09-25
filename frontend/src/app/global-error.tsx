@@ -1,20 +1,14 @@
 "use client";
-import { useEffect } from "react";
+// Global error boundary for the App Router.
+// Note: Do NOT render <html> or <body> here.
 
-export default function Error({
+export default function GlobalError({
   error,
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    // Log the error to console or reporting service
-    // eslint-disable-next-line no-console
-    console.error("Route error:", error);
-  }, [error]);
-
-  // Note: In the App Router, error.tsx must NOT render <html> or <body>.
   return (
     <div className="min-h-[60vh] grid place-items-center p-6">
       <div className="max-w-lg w-full text-center">
