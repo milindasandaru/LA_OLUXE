@@ -1,12 +1,11 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-
 const links = [
   { href: "/", label: "HOME" },
   { href: "/collection", label: "COLLECTION" },
   { href: "/about", label: "ABOUT" },
-  { href: "/connect", label: "CONNECT" },
+  { href: "/contact", label: "CONTACT" },
 ];
 
 export default function Navbar() {
