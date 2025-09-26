@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Poppins } from "next/font/google";
 import "remixicon/fonts/remixicon.css";
+import { SearchProvider } from "./context/SearchContext";
 
 export const metadata: Metadata = {
   title: "Adora.lk",
@@ -22,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased ${poppins.className}`}>
-        {children}
+        <SearchProvider>{children}</SearchProvider>
       </body>
     </html>
   );

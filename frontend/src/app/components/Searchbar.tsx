@@ -1,8 +1,12 @@
 "use client";
 import { useState } from "react";
+import { useSearch } from "../context/SearchContext";
 
 export default function Searchbar() {
   const [q, setQ] = useState("");
+  const { showSearch } = useSearch();
+
+  if (!showSearch) return null;
 
   return (
     <div className="max-w-6xl mx-auto mt-6 px-4">
