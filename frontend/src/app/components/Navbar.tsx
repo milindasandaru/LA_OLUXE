@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import { useSearch } from "../context/SearchContext";
 const links = [
   { href: "/", label: "HOME" },
   { href: "/collection", label: "COLLECTION" },
@@ -11,6 +12,7 @@ const links = [
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const cartCount = 0; // TODO: wire to real cart state when available
+  const { toggleShowSearch } = useSearch();
 
   return (
     <header className="w-full py-4 border-b">
@@ -30,7 +32,7 @@ export default function Navbar() {
 
         {/* Icons */}
         <div className="flex items-center gap-5">
-          <button aria-label="Search" className="text-gray-700 hover:text-black">
+          <button aria-label="Search" className="text-gray-700 hover:text-black" onClick={() => toggleShowSearch()}>
             <i className="ri-search-line text-xl" />
           </button>
 
