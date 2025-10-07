@@ -1,0 +1,116 @@
+# =============================
+# Global Monorepo .gitignore
+# Project: LA_OLUXE (admin / Frontend / Backend)
+# =============================
+
+###############
+# Node / JS  #
+###############
+node_modules/
+**/node_modules/
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+###############
+# Build Artifacts
+###############
+dist/
+build/
+.output/
+.out/
+.next/
+.cache/
+cache/
+temp/
+tmp/
+**/dist/
+**/build/
+coverage/
+coverage-final.json
+parcel-cache/
+
+###############
+# Environment / Secrets
+###############
+.env
+.env.*
+!.env.example   # Keep a template in VCS
+
+###############
+# Logs & Diagnostics
+###############
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+###############
+# OS / Editor / Tooling
+###############
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.orig
+*.iml
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+###############
+# Package Archives / Misc
+###############
+*.tgz
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+*.pid
+*.seed
+*.local
+
+###############
+# Dependency / Package Manager Artifacts
+###############
+package-lock.json.*
+yarn.lock.*
+pnpm-lock.yaml.*
+
+###############
+# Images / Media processing caches (if any tools used later)
+###############
+*.thumb.cache
+
+###############
+# Backend runtime storage (adjust if you want to version these)
+###############
+uploads/
+storage/
+Backend/uploads/
+Backend/storage/
+
+###############
+# Temporary Type Checking / Coverage Tools
+###############
+.nyc_output/
+jest-html-reporters-attach/
+
+###############
+# Framework Specific (Vite creates cache inside node_modules/.vite already ignored)
+###############
+.vitepress/cache
+
+###############
+# Netlify / Vercel / Other hosting artifact dirs (future proof)
+###############
+.netlify/
+.vercel/
+
+# End of root .gitignore

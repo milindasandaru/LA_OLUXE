@@ -1,0 +1,5 @@
+# Backend specific ignores (root .gitignore already covers most)
+# Keep uploads ignored unless you intentionally version sample assets.
+uploads/
+temp/
+*.local
