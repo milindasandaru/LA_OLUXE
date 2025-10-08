@@ -26,13 +26,16 @@ jobs:
       - name: Set CI env overrides
         run: |
           echo "SKIP_DB=1" >> $GITHUB_ENV
+          echo "NO_LISTEN=1" >> $GITHUB_ENV
       - name: Install dependencies
         run: npm ci || npm install
       - name: Lint (skip if no eslint config)
         run: |
           if [ -f .eslintrc* ]; then npm run lint || echo "Lint warnings"; else echo "No eslint config"; fi
-      - name: Simple syntax check
-        run: node -e "require('./server.js'); console.log('Loaded server.js successfully')" || exit 1
+      - name: Syntax check (AST only)
+        run: node --check server.js
+      - name: Import smoke test (no listen)
+        run: node -e "require('./server.js'); console.log('Imported server without listener')" || exit 1
 
   frontend:
     name: Frontend Build
