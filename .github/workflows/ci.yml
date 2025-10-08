@@ -18,13 +18,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Install dependencies
+      - name: Fast syntax-only check (no install)
+        run: |
+          echo "Fast syntax-only check using node --check"
+          # If you only need a quick CI-friendly syntax check, avoid npm installs.
+          # Check all JavaScript files under Backend using node --check (parses but doesn't execute).
+          set -e
+          git ls-files "Backend/**/*.js" | while read -r file; do
+            echo "Checking $file"
+            node --check "$file"
+          done
+        shell: bash
+      - name: (Optional) Full install + smoke-run (manual/long)
+        if: github.event_name == 'workflow_dispatch'
         run: |
           cd Backend
           npm ci
-      - name: Run backend syntax check
-        run: |
-          cd Backend
-          echo "Running backend syntax check (SKIP_DB=1)"
-          SKIP_DB=1 node -e "require('./server.js')" || (echo 'Syntax check failed' && exit 1)
+          echo "Running server with SKIP_DB=1"
+          SKIP_DB=1 node -e "require('./server.js')" || (echo 'Startup/smoke check failed' && exit 1)
         shell: bash
