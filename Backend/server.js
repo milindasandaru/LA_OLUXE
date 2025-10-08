@@ -61,7 +61,6 @@ app.use('/api/product', productRouter);
 app.get('/', (req, res) => {
     res.send("API Working!");
 });
-
 // Only start the HTTP listener if not running in CI / headless syntax check mode
 if (process.env.SKIP_DB === '1' || process.env.CI === 'true' || process.env.NO_LISTEN === '1') {
     console.log('CI/headless mode: server listener not started');
