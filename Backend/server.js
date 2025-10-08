@@ -41,8 +41,13 @@ import productRouter from './routes/productRoute.js';
 // App Config
 const app = express();
 const port = process.env.PORT || 4000;
-connectDB();
-connectCloudinary();
+
+if (process.env.SKIP_DB === '1') {
+    console.log('SKIP_DB=1 (CI mode) – skipping DB and Cloudinary init');
+} else {
+    connectDB();
+    connectCloudinary();
+}
 
 // Middlewares
 app.use(express.json());
