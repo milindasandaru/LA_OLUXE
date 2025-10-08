@@ -62,4 +62,12 @@ app.get('/', (req, res) => {
     res.send("API Working!");
 });
 
+// Only start the server if not in CI mode
+if (process.env.SKIP_DB !== '1') {
+    app.listen(port, () => console.log('Server started on PORT: ' + port));
+}
+app.get('/', (req, res) => {
+    res.send("API Working!");
+});
+
 app.listen(port, () => console.log('Server started on PORT: ' + port));
