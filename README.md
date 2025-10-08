@@ -224,11 +224,6 @@ If you use this code publicly, please also credit GreatStack and link back to th
 - Express & MongoDB ecosystem
 - Cloudinary for media hosting
 - Vite for fast frontend development
-
-<<<<<<< HEAD
 ---
-
-## Thanks for watching! ❤️
-=======
+- Thanks for watching! ❤️
 ---
->>>>>>> main
