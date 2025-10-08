@@ -226,3 +226,5 @@ If you use this code publicly, please also credit GreatStack and link back to th
 - Vite for fast frontend development
 
 ---
+
+## Thanks for watching! ❤️
