@@ -225,6 +225,10 @@ If you use this code publicly, please also credit GreatStack and link back to th
 - Cloudinary for media hosting
 - Vite for fast frontend development
 
+<<<<<<< HEAD
 ---
 
 ## Thanks for watching! ❤️
+=======
+---
+>>>>>>> main
