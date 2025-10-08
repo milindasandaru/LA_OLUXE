@@ -1,0 +1,30 @@
+# CI workflow for backend syntax check
+name: CI
+
+on:
+	push:
+		branches:
+			- '**'
+	pull_request:
+		branches:
+			- '**'
+
+jobs:
+	backend-syntax-check:
+		runs-on: ubuntu-latest
+		steps:
+			- name: Checkout code
+				uses: actions/checkout@v4
+			- name: Set up Node.js
+				uses: actions/setup-node@v4
+				with:
+					node-version: '20'
+			- name: Install dependencies
+				run: |
+					cd Backend
+					npm ci
+			- name: Run backend syntax check
+				run: |
+					cd Backend
+					SKIP_DB=1 node -e "require('./server.js')" || (echo 'Syntax check failed' && exit 1)
+				shell: bash
